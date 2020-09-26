@@ -1,0 +1,11 @@
+.calendar-weekdays tr {
+	display: flex;
+	align-items: flex-start;
+}
+
+.calendar-day-of-the-week {
+	color: #f8d57e;
+	font-style: italic;
+	width: 40px;
+	height: 40px;
+}
