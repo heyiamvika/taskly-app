@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import './CalendarNav.css';
 
-type Props = {};
+import arrowLeft from '../../assets/arrow_left.png';
+import arrowRight from '../../assets/arrow_right.png';
+
+type Props = {
+	toPrevMonth: () => void;
+	toNextMonth: () => void;
+	date: Date;
+};
 
 const LONG_MONTHS: string[] = [
 	'January',
@@ -19,14 +26,18 @@ const LONG_MONTHS: string[] = [
 	'December',
 ];
 
-export function CalendarNav(props: Props) {
-	const [date, setDate] = useState(new Date());
-
+export function CalendarNav({ date, toPrevMonth, toNextMonth }: Props) {
 	return (
 		<div className='calendar-nav'>
-			<span>
+			<span className='month-title'>
 				{LONG_MONTHS[date.getMonth()]}, {date.getFullYear()}
 			</span>
+			<button className='change-month-btn' onClick={toPrevMonth}>
+				<img src={arrowLeft} alt='to-previous-month' />
+			</button>
+			<button className='change-month-btn' onClick={toNextMonth}>
+				<img src={arrowRight} alt='to-next-month' />
+			</button>
 		</div>
 	);
 }

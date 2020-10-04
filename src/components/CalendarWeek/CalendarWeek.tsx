@@ -7,17 +7,16 @@ import './CalendarWeek.css';
 type Props = {
 	// Question: is there more elegant way to accept array of fixed size?
 	daysValues: readonly number[];
+	currentDate: Date;
 };
 
-export function CalendarWeek(props: Props) {
-	const [date, setDate] = useState(new Date());
-
+export function CalendarWeek({ daysValues, currentDate }: Props) {
 	const renderDaysOfTheWeek = () => {
-		return props.daysValues.map((value, index) => (
+		return daysValues.map((value, index) => (
 			<CalendarDay
 				key={`${String(value)} ${String(index)}`}
 				day={value}
-				today={date.getDate() === value}
+				today={false}
 			/>
 		));
 	};

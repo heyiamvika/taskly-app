@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { CalendarWeek } from '../CalendarWeek/CalendarWeek';
 import { CalendarWeekdays } from '../CalendarWeekdays/CalendarWeekdays';
 
 import './CalendarMonth.css';
 
-type Props = {};
+type Props = {
+	visibleDate: Date;
+	currentDate: Date;
+};
 
 const DAYS_IN_WEEK: number = 7;
 
-export function CalendarMonth(props: Props) {
-	const [date, setDate] = useState(new Date());
-
+export function CalendarMonth({ visibleDate, currentDate }: Props) {
 	const getFirstDayOfMonthAsWeekday = (): number =>
-		new Date(date.getFullYear(), date.getMonth(), 0).getDay();
+		new Date(visibleDate.getFullYear(), visibleDate.getMonth(), 0).getDay();
 
 	const getDaysInMonthCount = (): number =>
-		new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+		new Date(
+			visibleDate.getFullYear(),
+			visibleDate.getMonth() + 1,
+			0,
+		).getDate();
 
 	const getWeeksCountInMonth = (
 		blankDaysCount: number,
@@ -70,6 +75,7 @@ export function CalendarMonth(props: Props) {
 				<CalendarWeek
 					key={`week ${i}`}
 					daysValues={getDaysValuesInWeek(i, daysValues)}
+					currentDate={currentDate}
 				/>,
 			);
 		}
