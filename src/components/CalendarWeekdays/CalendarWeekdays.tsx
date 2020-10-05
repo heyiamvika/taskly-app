@@ -1,18 +1,10 @@
 import React from 'react';
 
+import { DAYS_OF_THE_WEEK } from '../../utils/constants';
+
 import './CalendarWeekdays.css';
 
 type Props = {};
-
-const DAYS_OF_THE_WEEK: string[] = [
-	'Mon',
-	'Tue',
-	'Wen',
-	'Thu',
-	'Fri',
-	'Sat',
-	'Sun',
-];
 
 export function CalendarWeekdays(props: Props) {
 	const renderDaysOfTheWeek = (): JSX.Element[] => {

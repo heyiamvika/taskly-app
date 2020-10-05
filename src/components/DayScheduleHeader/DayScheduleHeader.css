@@ -1,0 +1,12 @@
+.day-schedule-header-heading {
+	font-family: ABeeZee;
+	font-size: 40px;
+	font-style: italic;
+	line-height: 1.25;
+	text-align: left;
+	color: #000000;
+}
+
+.active-day-heading {
+	color: #f4b860;
+}
