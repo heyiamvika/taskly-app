@@ -40,19 +40,22 @@ export function CalendarMonth({ visibleDate, currentDate }: Props) {
 	const getDaysValues = (
 		blankDaysCount: number,
 		daysInMonthCount: number,
-	): number[] => {
+	): (Date | undefined)[] => {
 		const days = [];
 
-		for (let i = 0; i < blankDaysCount; i++) days.push(0);
-		for (let i = 0; i < daysInMonthCount; i++) days.push(i + 1);
+		for (let i = 0; i < blankDaysCount; i++) days.push(undefined);
+		for (let i = 0; i < daysInMonthCount; i++)
+			days.push(
+				new Date(visibleDate.getFullYear(), visibleDate.getMonth(), i + 1),
+			);
 
 		return days;
 	};
 
 	const getDaysValuesInWeek = (
 		weekIndex: number,
-		daysValues: number[],
-	): number[] => {
+		daysValues: (Date | undefined)[],
+	): (Date | undefined)[] => {
 		const days = [];
 
 		for (let i = 0; i < 7; i++) {

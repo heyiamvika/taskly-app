@@ -2,16 +2,16 @@ import React from 'react';
 import './CalendarDay.css';
 
 type Props = {
-	day: number;
-	today: boolean;
+	value: Date | undefined;
+	today: Date;
 };
 
-export function CalendarDay(props: Props) {
+export function CalendarDay({ value, today }: Props) {
 	const getDayClass = () => {
-		return `calendar-day ${props.today ? 'today' : ''} ${
-			props.day === 0 ? 'empty' : ''
-		}`;
+		return `calendar-day ${
+			value && value.toDateString() === today.toDateString() ? 'today' : ''
+		} ${!value ? 'empty' : ''}`;
 	};
 
-	return <td className={getDayClass()}>{props.day === 0 ? '' : props.day}</td>;
+	return <td className={getDayClass()}>{value ? value.getDate() : ''}</td>;
 }
