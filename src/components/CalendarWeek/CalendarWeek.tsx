@@ -7,15 +7,24 @@ import './CalendarWeek.css';
 type Props = {
 	daysValues: readonly (Date | undefined)[];
 	currentDate: Date;
+	visibleDate: Date;
+	onDayChoose: (value: Date | undefined) => void;
 };
 
-export function CalendarWeek({ daysValues, currentDate }: Props) {
+export function CalendarWeek({
+	daysValues,
+	currentDate,
+	visibleDate,
+	onDayChoose,
+}: Props) {
 	const renderDaysOfTheWeek = () => {
 		return daysValues.map((value, index) => (
 			<CalendarDay
 				key={`${String(value)} ${String(index)}`}
 				value={value}
-				today={currentDate}
+				currentDate={currentDate}
+				visibleDate={visibleDate}
+				onDayChoose={onDayChoose}
 			/>
 		));
 	};

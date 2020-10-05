@@ -6,7 +6,7 @@ import { CalendarNav } from '../CalendarNav/CalendarNav';
 type Props = {};
 
 export function Calendar(props: Props) {
-	const [currentDate, setCurrentDate] = useState(new Date());
+	const [currentDate] = useState(new Date());
 	const [visibleDate, setVisibleDate] = useState(currentDate);
 
 	const switchToPrevMonth = () => {
@@ -14,7 +14,7 @@ export function Calendar(props: Props) {
 			new Date(
 				visibleDate.getFullYear(),
 				visibleDate.getMonth() - 1,
-				visibleDate.getDay(),
+				visibleDate.getDate(),
 			),
 		);
 	};
@@ -24,9 +24,14 @@ export function Calendar(props: Props) {
 			new Date(
 				visibleDate.getFullYear(),
 				visibleDate.getMonth() + 1,
-				visibleDate.getDay(),
+				visibleDate.getDate(),
 			),
 		);
+	};
+
+	const chooseDay = (value: Date | undefined) => {
+		if (!value) return;
+		setVisibleDate(value);
 	};
 
 	return (
@@ -36,7 +41,11 @@ export function Calendar(props: Props) {
 				toPrevMonth={switchToPrevMonth}
 				toNextMonth={switchToNextMonth}
 			/>
-			<CalendarMonth visibleDate={visibleDate} currentDate={currentDate} />
+			<CalendarMonth
+				visibleDate={visibleDate}
+				currentDate={currentDate}
+				onDayChoose={chooseDay}
+			/>
 		</div>
 	);
 }

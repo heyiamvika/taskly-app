@@ -10,3 +10,8 @@
 	background-color: #f8d57e;
 	border-radius: 50%;
 }
+
+.chosen-day {
+	border: 2px solid #f8d57e;
+	border-radius: 50%;
+}

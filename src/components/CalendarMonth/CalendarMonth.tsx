@@ -8,11 +8,16 @@ import './CalendarMonth.css';
 type Props = {
 	visibleDate: Date;
 	currentDate: Date;
+	onDayChoose: (value: Date | undefined) => void;
 };
 
 const DAYS_IN_WEEK: number = 7;
 
-export function CalendarMonth({ visibleDate, currentDate }: Props) {
+export function CalendarMonth({
+	visibleDate,
+	currentDate,
+	onDayChoose,
+}: Props) {
 	const getFirstDayOfMonthAsWeekday = (): number =>
 		new Date(visibleDate.getFullYear(), visibleDate.getMonth(), 0).getDay();
 
@@ -79,6 +84,8 @@ export function CalendarMonth({ visibleDate, currentDate }: Props) {
 					key={`week ${i}`}
 					daysValues={getDaysValuesInWeek(i, daysValues)}
 					currentDate={currentDate}
+					visibleDate={visibleDate}
+					onDayChoose={onDayChoose}
 				/>,
 			);
 		}
