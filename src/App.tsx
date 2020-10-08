@@ -1,49 +1,18 @@
-import React, { useState } from 'react';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import { Calendar } from './components/Calendar/Calendar';
-import { DaySchedule } from './components/DaySchedule/DaySchedule';
+import * as ROUTES from './utils/routes';
+import { HomePage } from './components/pages/HomePage/HomePage';
+import { WelcomePage } from './components/pages/WelcomePage/WelcomePage';
 
 function App() {
-	const [currentDate] = useState(new Date());
-	const [visibleDate, setVisibleDate] = useState(currentDate);
-
-	const switchToPrevMonth = () => {
-		setVisibleDate(
-			new Date(
-				visibleDate.getFullYear(),
-				visibleDate.getMonth() - 1,
-				visibleDate.getDate(),
-			),
-		);
-	};
-
-	const switchToNextMonth = () => {
-		setVisibleDate(
-			new Date(
-				visibleDate.getFullYear(),
-				visibleDate.getMonth() + 1,
-				visibleDate.getDate(),
-			),
-		);
-	};
-
-	const chooseDay = (value: Date | undefined) => {
-		if (!value) return;
-		setVisibleDate(value);
-	};
-
 	return (
-		<div className='App'>
-			<Calendar
-				currentDate={currentDate}
-				visibleDate={visibleDate}
-				switchToNextMonth={switchToNextMonth}
-				switchToPrevMonth={switchToPrevMonth}
-				onDayChoose={chooseDay}
-			/>
-			<DaySchedule visibleDay={visibleDate} />
-		</div>
+		<Router>
+			<div className='app'>
+				<Route exact path={ROUTES.WELCOME_SCREEN} component={WelcomePage} />
+				<Route path={ROUTES.MAIN_SCREEN} component={HomePage} />
+			</div>
+		</Router>
 	);
 }
 

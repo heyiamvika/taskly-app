@@ -1,0 +1,12 @@
+.plain-text-yellow-btn {
+	color: #f8d57e;
+	border: 0;
+	background-color: transparent;
+	height: inherit;
+	text-decoration: none;
+}
+
+.plain-text-yellow-btn:hover {
+	color: #000000;
+	cursor: pointer;
+}
