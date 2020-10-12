@@ -12,12 +12,3 @@
 	font-size: 40px;
 	margin-bottom: 50px;
 }
-
-.signup-form {
-	display: flex;
-	flex-direction: column;
-}
-
-.submit-btn {
-	margin: 40px 0 20px 0;
-}

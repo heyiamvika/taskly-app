@@ -21,7 +21,11 @@ export function WelcomePage() {
 				</span>
 				<div className='authorization-options'>
 					<div className='signup-option'>
-						<OvalYellowButton text='Signup' to={ROUTES.SIGN_UP} />
+						<OvalYellowButton
+							text='Signup'
+							to={ROUTES.SIGN_UP}
+							disabled={false}
+						/>
 					</div>
 					<div className='login-option'>
 						<span>Do you have an account?</span>

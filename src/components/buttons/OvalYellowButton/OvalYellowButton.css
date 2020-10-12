@@ -14,3 +14,8 @@
 	opacity: 0.9;
 	cursor: pointer;
 }
+
+.oval-yellow-btn:disabled {
+	background-color: #eceff2;
+	color: #ffffff;
+}
