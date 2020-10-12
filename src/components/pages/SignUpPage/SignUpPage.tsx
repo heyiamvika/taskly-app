@@ -11,7 +11,7 @@ import { SignupForm } from '../../forms/SignupForm/SignupForm';
 export function SignUpPage() {
 	return (
 		<div className='signup-page'>
-			<h1 className='signup-heading'>Signup to Taskly</h1>
+			<h1 className='signup-heading'>Signup</h1>
 			<FirebaseContext.Consumer>
 				{(firebase) => <SignupForm firebase={firebase} />}
 			</FirebaseContext.Consumer>
