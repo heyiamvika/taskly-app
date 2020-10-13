@@ -1,0 +1,36 @@
+.user-info {
+	width: 250px;
+	height: 60px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.profile-pic {
+	width: 60px;
+	height: 60px;
+	overflow: hidden;
+	border-radius: 50%;
+	border: 2px solid #f8d57e;
+}
+
+.profile-pic img {
+	object-fit: contain;
+	object-position: top;
+	height: 100%;
+	width: 100%;
+}
+
+.name-actions-wrapper {
+	max-width: 103px;
+	display: flex;
+	flex-direction: column;
+}
+
+.user-name {
+	font-size: 18px;
+	font-style: italic;
+	line-height: 1;
+	text-align: left;
+	margin-bottom: 15px;
+}

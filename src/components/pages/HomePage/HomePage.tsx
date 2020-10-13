@@ -4,6 +4,7 @@ import './HomePage.css';
 
 import { Calendar } from '../../Calendar/Calendar';
 import { DaySchedule } from '../../DaySchedule/DaySchedule';
+import { UserInfo } from '../../UserInfo/UserInfo';
 
 export function HomePage() {
 	const [currentDate] = useState(new Date());
@@ -44,6 +45,7 @@ export function HomePage() {
 				onDayChoose={chooseDay}
 			/>
 			<DaySchedule visibleDay={visibleDate} />
+			<UserInfo />
 		</div>
 	);
 }

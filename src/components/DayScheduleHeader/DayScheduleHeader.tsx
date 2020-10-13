@@ -9,8 +9,6 @@ type Props = {
 };
 
 export function DayScheduleHeader({ visibleDay }: Props) {
-	console.log(visibleDay.getDay());
-
 	return (
 		<div className='day-schedule-header'>
 			<span className='day-schedule-header-heading'>Today's schedule</span>
