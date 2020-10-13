@@ -1,0 +1,14 @@
+.signup-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.submit-btn {
+	margin: 20px 0 20px 0;
+}
+
+.signup-error {
+	color: #d8000c;
+	text-align: center;
+}
