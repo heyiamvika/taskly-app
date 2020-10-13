@@ -1,14 +1,16 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 
+import * as ROUTES from '../../../utils/routes';
+
 import './SignupForm.css';
 
 import { OvalYellowButton } from '../../buttons/OvalYellowButton/OvalYellowButton';
 import { BasicInput } from '../../inputs/BasicInput/BasicInput';
 
-type Props = {
-	// TO_DO: what is the correct type for it?
-	firebase: any;
-};
+// type Props = {
+// 	// TO_DO: what is the correct type for it?
+// 	firebase: any;
+// };
 
 type User = {
 	username: string;
@@ -18,7 +20,7 @@ type User = {
 	error: Error | null;
 };
 
-export function SignupForm({ firebase }: Props) {
+export function SignupForm(props: any) {
 	const [user, setUser] = useState<User>({
 		username: '',
 		email: '',
@@ -32,10 +34,11 @@ export function SignupForm({ firebase }: Props) {
 
 		const { email, passwordOne } = user;
 
-		firebase
+		props.firebase
 			.createUserWithEmailAndPassword(email, passwordOne)
 			.then((authUser: User) => {
 				setUser({ ...user, ...authUser });
+				props.history.push(ROUTES.MAIN_SCREEN);
 			})
 			.catch((error: Error) => {
 				setUser({ ...user, error });
@@ -83,10 +86,10 @@ export function SignupForm({ firebase }: Props) {
 				inputType='password'
 				placeholder='Confirm Password'
 			/>
+			{user.error && <p className='signup-error'>{user.error.message}</p>}
 			<div className='submit-btn'>
 				<OvalYellowButton text='Signup' type='submit' disabled={isInvalid} />
 			</div>
-			{/* {user.error && <p>{user.error.message}</p>} */}
 		</form>
 	);
 }
