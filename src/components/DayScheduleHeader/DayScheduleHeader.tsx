@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { FULL_DAYS_OF_THE_WEEK } from '../../utils/constants';
+import { AddNewEventButton } from '../buttons/AddNewEventButton/AddNewEventButton';
 
 import './DayScheduleHeader.css';
 
@@ -19,7 +20,7 @@ export function DayScheduleHeader({ visibleDay }: Props) {
 					} ${visibleDay.getDate()}`}</span>
 				</div>
 			</div>
-			<button className='add-new-task-btn'>+</button>
+			<AddNewEventButton />
 		</div>
 	);
 }

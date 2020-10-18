@@ -1,0 +1,17 @@
+.add-new-event-btn {
+	width: 55px;
+	height: 55px;
+	background-color: #f8d57e;
+	border: 0;
+	border-radius: 50%;
+	color: #ffffff;
+	font-size: 30px;
+	border: 2px solid;
+	border-color: transparent;
+}
+
+.add-new-event-btn:hover {
+	background-color: #ffffff;
+	color: #f8d57e;
+	border-color: #f8d57e;
+}
