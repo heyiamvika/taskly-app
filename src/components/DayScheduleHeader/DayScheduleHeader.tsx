@@ -3,7 +3,7 @@ import React from 'react';
 import { ButtonDirection, ButtonSize } from '../../utils/buttonOptions';
 import { FULL_DAYS_OF_THE_WEEK } from '../../utils/constants';
 
-import { AddNewEventButton } from '../buttons/AddNewEventButton/AddNewEventButton';
+import { RoundYellowButton } from '../buttons/RoundYellowButton/RoundYellowButton';
 import { RoundArrowButton } from '../buttons/RoundArrowButton/RoundArrowButton';
 
 import './DayScheduleHeader.css';
@@ -12,12 +12,14 @@ type Props = {
 	visibleDay: Date;
 	onPrevDayBtnClick: () => void;
 	onNextDayBtnClick: () => void;
+	onAddNewEventBtnClick: () => void;
 };
 
 export function DayScheduleHeader({
 	visibleDay,
 	onPrevDayBtnClick,
 	onNextDayBtnClick,
+	onAddNewEventBtnClick,
 }: Props) {
 	return (
 		<div className='day-schedule-header'>
@@ -39,7 +41,7 @@ export function DayScheduleHeader({
 					/>
 				</div>
 			</div>
-			<AddNewEventButton />
+			<RoundYellowButton label='+' onClick={onAddNewEventBtnClick} />
 		</div>
 	);
 }

@@ -1,0 +1,29 @@
+.add-new-event-section {
+	width: 400px;
+	height: 100vh;
+
+	background-color: #ffffff;
+	border: 2px solid red;
+	border-radius: 0px 20px 20px 20px;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: 0.8s;
+
+	display: flex;
+}
+
+.visible {
+	left: 0;
+}
+
+.hidden {
+	left: -430px;
+}
+
+.close-btn-wrapper {
+	position: absolute;
+	top: 45%;
+	left: 370px;
+}

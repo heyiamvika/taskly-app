@@ -18,6 +18,7 @@ type Props = {
 	dayEvents: object | null;
 	switchToPrevDay: () => void;
 	switchToNextDay: () => void;
+	onAddNewEventBtnClick: () => void;
 };
 
 export function DaySchedule({
@@ -25,6 +26,7 @@ export function DaySchedule({
 	dayEvents,
 	switchToPrevDay,
 	switchToNextDay,
+	onAddNewEventBtnClick,
 }: Props) {
 	if (dayEvents) console.log(Object.values(dayEvents));
 
@@ -48,6 +50,7 @@ export function DaySchedule({
 					visibleDay={visibleDay}
 					onPrevDayBtnClick={switchToPrevDay}
 					onNextDayBtnClick={switchToNextDay}
+					onAddNewEventBtnClick={onAddNewEventBtnClick}
 				/>
 			</div>
 			<div className='day-events-wrapper'>

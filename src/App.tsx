@@ -11,7 +11,7 @@ import { LoginPage } from './components/pages/LoginPage/LoginPage';
 import { withFirebase } from './components/Firebase/index';
 import { AuthUserContext, withAuthentification } from './components/Session';
 
-const Home = withFirebase(withAuthentification(HomePage));
+const HomePageWithFirebase = withFirebase(withAuthentification(HomePage));
 
 function App(props: any) {
 	const [user, setUser] = useState<{} | null>(null);
@@ -29,9 +29,7 @@ function App(props: any) {
 			<Router>
 				<div className='app'>
 					<Route exact path={ROUTES.WELCOME_SCREEN} component={WelcomePage} />
-					<Route path={ROUTES.MAIN_SCREEN}>
-						<Home />
-					</Route>
+					<Route path={ROUTES.MAIN_SCREEN} component={HomePageWithFirebase} />
 					<Route path={ROUTES.SIGN_UP} component={SignUpPage} />
 					<Route path={ROUTES.LOGIN} component={LoginPage} />
 				</div>

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 
 import './HomePage.css';
@@ -6,11 +5,13 @@ import './HomePage.css';
 import { Calendar } from '../../Calendar/Calendar';
 import { DaySchedule } from '../../DaySchedule/DaySchedule';
 import { UserInfo } from '../../UserInfo/UserInfo';
+import { AddNewEvent } from '../../AddNewEvent/AddNewEvent';
 
 import withAuthentification from '../../Session/withAuthentification';
-import Firebase from '../../Firebase/index';
+import Firebase, { withFirebase } from '../../Firebase/index';
 
 const UserInfoWithAuthentification = withAuthentification(UserInfo);
+const AddNewEventSection = withFirebase(AddNewEvent);
 
 type Props = {
 	firebase: Firebase;
@@ -25,12 +26,7 @@ export function HomePage({ firebase, user }: Props) {
 	const [monthlySchedule, setMonthlySchedule] = useState<{
 		[key: number]: object;
 	} | null>(null);
-
-	// console.log('monthlySchedule', monthlySchedule);
-	// console.log(
-	// 	'visibleSchedule',
-	// 	monthlySchedule && monthlySchedule[visibleDate.getDate()],
-	// );
+	const [addNewEventVisible, setAddNewEventVisible] = useState(false);
 
 	const switchToPrevMonth = () => {
 		setVisibleDate(
@@ -81,6 +77,9 @@ export function HomePage({ firebase, user }: Props) {
 		return monthlySchedule ? monthlySchedule[visibleDate.getDate()] : null;
 	};
 
+	const openAddNewEventSection = () => setAddNewEventVisible(true);
+	const closeAddNewEventSection = () => setAddNewEventVisible(false);
+
 	useEffect(() => {
 		if (!user) return;
 		//componentDidMount
@@ -124,16 +123,10 @@ export function HomePage({ firebase, user }: Props) {
 				visibleDate.getMonth(),
 			);
 
-			// console.log('newSchedule', newSchedule);
 			setMonthlySchedule(newSchedule);
 		}
 
 		fetchNewSchedule();
-
-		// return () => {
-		// 	// runs when componentDidUnmount
-		// 	console.log('cleanup');
-		// };
 	}, [currentDate, visibleDate, firebase, user]);
 
 	return (
@@ -150,8 +143,13 @@ export function HomePage({ firebase, user }: Props) {
 				dayEvents={getVisibleDayEvents()}
 				switchToPrevDay={switchToPrevDay}
 				switchToNextDay={switchToNextDay}
+				onAddNewEventBtnClick={openAddNewEventSection}
 			/>
 			<UserInfoWithAuthentification />
+			<AddNewEventSection
+				isVisible={addNewEventVisible}
+				onCloseBtnClick={closeAddNewEventSection}
+			/>
 		</div>
 	);
 }
