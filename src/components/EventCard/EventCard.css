@@ -2,13 +2,20 @@
 	width: 465px;
 	min-height: 75px;
 	padding: 30px 30px;
-	background-color: #f6f7fb;
 	margin-bottom: 10px;
 	border-radius: 20px;
 
 	display: flex;
 	justify-content: space-between;
 	align-items: top;
+}
+
+.passed {
+	background-color: #f8d57e;
+}
+
+.future {
+	background-color: #f6f7fb;
 }
 
 .event-information {

@@ -27,8 +27,15 @@ export function EventCard({
 		}`;
 	};
 
+	const getCardClass = () => {
+		// To-do: this is not very effective, pass through props / context??
+		const dateFromTimeString = new Date(startTime);
+		const now = new Date();
+		return dateFromTimeString > now ? 'future' : 'passed';
+	};
+
 	return (
-		<div className='event-card' key={name}>
+		<div className={`event-card ${getCardClass()}`} key={name}>
 			<div className='event-information'>
 				<h4 className='event-card-name'>{name}</h4>
 				<p className='event-notes'>{notes}</p>
