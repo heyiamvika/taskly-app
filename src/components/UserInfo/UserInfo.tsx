@@ -8,11 +8,13 @@ import { withFirebase } from '../Firebase/index';
 import defaultUser from '../../assets/default-user.svg';
 import { LogoutButton } from '../buttons/LogoutButton/LogoutButton';
 
-type Props = {};
+type Props = {
+	user: null | {};
+};
 
 const LogoutBtn = withRouter(withFirebase(LogoutButton));
 
-export function UserInfo() {
+export function UserInfo({ user }: Props) {
 	return (
 		<div className='user-info'>
 			<div className='name-actions-wrapper'>

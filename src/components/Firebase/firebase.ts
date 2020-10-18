@@ -1,5 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 const config = {
 	apiKey: process.env.REACT_APP_API_KEY,
@@ -10,13 +11,23 @@ const config = {
 	messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
 
+type Task = {
+	startTime: string;
+	finishTime: string;
+	name: string;
+	notes: string;
+	isPinned: boolean;
+};
+
 class Firebase {
 	// TO_DO: search for a correct solution for that (what type should auth be?)
 	auth: any;
+	db: any;
 
 	constructor() {
 		app.initializeApp(config);
 		this.auth = app.auth();
+		this.db = app.database();
 	}
 
 	createUserWithEmailAndPassword(email: string, password: string) {
@@ -38,6 +49,37 @@ class Firebase {
 	updatePassword(password: string) {
 		return this.auth.currentUser.updatePassword(password);
 	}
+
+	user(uid: string) {
+		return this.db.ref(`users/${uid}`);
+	}
+
+	users() {
+		return this.db.ref(`users/`);
+	}
+
+	async getMonthlySchedule(uid: string, year: number, month: number) {
+		const schedulesRef = this.db.ref(`calendars/${uid}/${year}/${month}`);
+		const schedule = await schedulesRef
+			.once('value')
+			.then((snapshot: any) => snapshot.val());
+
+		return schedule;
+	}
+
+	createNewTask(
+		uid: string,
+		year: number,
+		month: number,
+		day: number,
+		task: Task,
+	) {
+		this.db.ref(`calendars/${uid}/${year}/${month}/${day}`).push(task);
+	}
+
+	pinTask() {}
+
+	deleteTask() {}
 }
 
 export default Firebase;

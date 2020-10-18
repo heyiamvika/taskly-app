@@ -32,7 +32,7 @@ export function SignupForm(props: any) {
 	const onFormSubmit = (event: FormEvent<HTMLFormElement>): void => {
 		event.preventDefault();
 
-		const { email, passwordOne } = user;
+		const { username, email, passwordOne } = user;
 
 		props.firebase
 			.createUserWithEmailAndPassword(email, passwordOne)
