@@ -16,6 +16,12 @@
 	color: #000000;
 }
 
+.day-schedule-header-active-day {
+	display: flex;
+	align-items: center;
+}
+
 .active-day-heading {
 	color: #f4b860;
+	margin-right: 15px;
 }

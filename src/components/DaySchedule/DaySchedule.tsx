@@ -16,9 +16,16 @@ type Event = {
 type Props = {
 	visibleDay: Date;
 	dayEvents: object | null;
+	switchToPrevDay: () => void;
+	switchToNextDay: () => void;
 };
 
-export function DaySchedule({ visibleDay, dayEvents }: Props) {
+export function DaySchedule({
+	visibleDay,
+	dayEvents,
+	switchToPrevDay,
+	switchToNextDay,
+}: Props) {
 	if (dayEvents) console.log(Object.values(dayEvents));
 
 	const renderEventCards = () => {
@@ -29,15 +36,23 @@ export function DaySchedule({ visibleDay, dayEvents }: Props) {
 	};
 
 	const renderNoEvents = () => {
-		return <span>You have no events on this day!</span>;
+		return (
+			<span className='no-events-text'>You have no events on this day!</span>
+		);
 	};
 
 	return (
 		<div className='day-schedule'>
 			<div className='day-schedule-header-wrapper'>
-				<DayScheduleHeader visibleDay={visibleDay} />
+				<DayScheduleHeader
+					visibleDay={visibleDay}
+					onPrevDayBtnClick={switchToPrevDay}
+					onNextDayBtnClick={switchToNextDay}
+				/>
 			</div>
-			{dayEvents ? renderEventCards() : renderNoEvents()}
+			<div className='day-events-wrapper'>
+				{dayEvents ? renderEventCards() : renderNoEvents()}
+			</div>
 		</div>
 	);
 }

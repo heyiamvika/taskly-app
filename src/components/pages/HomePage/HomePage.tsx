@@ -52,6 +52,26 @@ export function HomePage({ firebase, user }: Props) {
 		);
 	};
 
+	const switchToPrevDay = () => {
+		setVisibleDate(
+			new Date(
+				visibleDate.getFullYear(),
+				visibleDate.getMonth(),
+				visibleDate.getDate() - 1,
+			),
+		);
+	};
+
+	const switchToNextDay = () => {
+		setVisibleDate(
+			new Date(
+				visibleDate.getFullYear(),
+				visibleDate.getMonth(),
+				visibleDate.getDate() + 1,
+			),
+		);
+	};
+
 	const chooseDay = (value: Date | undefined) => {
 		if (!value) return;
 		setVisibleDate(value);
@@ -125,7 +145,12 @@ export function HomePage({ firebase, user }: Props) {
 				switchToPrevMonth={switchToPrevMonth}
 				onDayChoose={chooseDay}
 			/>
-			<DaySchedule visibleDay={visibleDate} dayEvents={getVisibleDayEvents()} />
+			<DaySchedule
+				visibleDay={visibleDate}
+				dayEvents={getVisibleDayEvents()}
+				switchToPrevDay={switchToPrevDay}
+				switchToNextDay={switchToNextDay}
+			/>
 			<UserInfoWithAuthentification />
 		</div>
 	);
