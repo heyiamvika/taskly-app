@@ -3,6 +3,8 @@ import React from 'react';
 import { CalendarMonth } from '../CalendarMonth/CalendarMonth';
 import { CalendarNav } from '../CalendarNav/CalendarNav';
 
+import './Calendar.css';
+
 type Props = {
 	currentDate: Date;
 	visibleDate: Date;

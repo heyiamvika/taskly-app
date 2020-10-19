@@ -131,25 +131,29 @@ export function HomePage({ firebase, user }: Props) {
 
 	return (
 		<div className='home-page'>
-			<Calendar
-				currentDate={currentDate}
-				visibleDate={visibleDate}
-				switchToNextMonth={switchToNextMonth}
-				switchToPrevMonth={switchToPrevMonth}
-				onDayChoose={chooseDay}
-			/>
-			<DaySchedule
-				visibleDay={visibleDate}
-				dayEvents={getVisibleDayEvents()}
-				switchToPrevDay={switchToPrevDay}
-				switchToNextDay={switchToNextDay}
-				onAddNewEventBtnClick={openAddNewEventSection}
-			/>
-			<UserInfoWithAuthentification />
-			<AddNewEventSection
-				isVisible={addNewEventVisible}
-				onCloseBtnClick={closeAddNewEventSection}
-			/>
+			<div className='home-page-grey-section'>
+				<Calendar
+					currentDate={currentDate}
+					visibleDate={visibleDate}
+					switchToNextMonth={switchToNextMonth}
+					switchToPrevMonth={switchToPrevMonth}
+					onDayChoose={chooseDay}
+				/>
+			</div>
+			<div className='home-page-white-section'>
+				<DaySchedule
+					visibleDay={visibleDate}
+					dayEvents={getVisibleDayEvents()}
+					switchToPrevDay={switchToPrevDay}
+					switchToNextDay={switchToNextDay}
+					onAddNewEventBtnClick={openAddNewEventSection}
+				/>
+				<UserInfoWithAuthentification />
+				<AddNewEventSection
+					isVisible={addNewEventVisible}
+					onCloseBtnClick={closeAddNewEventSection}
+				/>
+			</div>
 		</div>
 	);
 }

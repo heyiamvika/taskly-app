@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { EmojiButton } from '@joeattardi/emoji-button';
 
 import './EmojiPicker.css';
 
-type Props = {};
+type Props = {
+	emoji: string | undefined;
+	onEmojiChange: <Type>(newValue: Type, key: string) => void;
+};
 
-export function EmojiPicker() {
-	const [currentEmoji, setCurrentEmoji] = useState<string | undefined>('🥰');
-
+export function EmojiPicker({ emoji, onEmojiChange }: Props) {
 	const picker = new EmojiButton();
 	const trigger = document.querySelector('#emoji-trigger');
 
 	picker.on('emoji', (selection) => {
 		// handle the selected emoji here
-		setCurrentEmoji(selection.emoji);
+		onEmojiChange<string | undefined>(selection.emoji, 'emoji');
 	});
 
 	trigger?.addEventListener('click', () =>
@@ -25,7 +26,7 @@ export function EmojiPicker() {
 		<div>
 			<button id='emoji-trigger' className='emoji-button'>
 				<span className='initial-emoji' role='img' aria-label='emoji'>
-					{currentEmoji}
+					{emoji}
 				</span>
 			</button>
 		</div>

@@ -41,8 +41,8 @@ export function LoginForm(props: any) {
 			});
 	};
 
-	const onInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
-		setUser({ ...user, [event.target.name]: event.target.value });
+	const onInputChange = <Type extends {}>(newValue: Type, key: string) => {
+		setUser({ ...user, [key]: newValue });
 	};
 
 	const isInvalid: boolean = !user.email || !user.password;
@@ -55,6 +55,7 @@ export function LoginForm(props: any) {
 				onChange={onInputChange}
 				inputType='text'
 				placeholder='Email Address'
+				color='yellow'
 			/>
 			<BasicInput
 				name='password'
@@ -62,6 +63,7 @@ export function LoginForm(props: any) {
 				onChange={onInputChange}
 				inputType='password'
 				placeholder='Password'
+				color='yellow'
 			/>
 			{user.error && <p className='signup-error'>{user.error.message}</p>}
 			<div className='submit-btn'>

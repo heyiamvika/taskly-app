@@ -1,13 +1,14 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 
 import './BasicInput.css';
 
 type Props = {
 	name: string;
 	value: string;
-	inputType: string;
+	inputType: 'text' | 'email' | 'password';
 	placeholder: string;
-	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	color: 'yellow' | 'transparent';
+	onChange: <Type>(newValue: Type, key: string) => void;
 };
 
 export function BasicInput({
@@ -16,15 +17,16 @@ export function BasicInput({
 	inputType,
 	placeholder,
 	onChange,
+	color,
 }: Props) {
 	return (
 		<input
 			name={name}
 			value={value}
-			onChange={onChange}
+			onChange={(e) => onChange<string>(e.target.value, e.target.name)}
 			type={inputType}
 			placeholder={placeholder}
-			className='basic-input'
+			className={`basic-input ${color}`}
 		/>
 	);
 }

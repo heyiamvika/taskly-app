@@ -1,9 +1,9 @@
 .add-new-event-section {
-	width: 400px;
+	width: 477px;
 	height: 100vh;
 
 	background-color: #ffffff;
-	border: 2px solid red;
+	border: 2px solid #f8d57e;
 	border-radius: 0px 20px 20px 20px;
 
 	position: absolute;
@@ -23,11 +23,15 @@
 }
 
 .hidden {
-	left: -430px;
+	left: -507px;
 }
 
 .close-btn-wrapper {
 	position: absolute;
 	top: 45%;
-	left: 370px;
+	left: 447px;
+}
+
+.emoji-picker-wrapper {
+	margin-bottom: 20px;
 }
