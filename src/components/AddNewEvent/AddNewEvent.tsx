@@ -5,6 +5,7 @@ import './AddNewEvent.css';
 import { RoundYellowButton } from '../buttons/RoundYellowButton/RoundYellowButton';
 
 import Firebase from '../Firebase/index';
+import { EmojiPicker } from '../buttons/EmojiPicker/EmojiPicker';
 
 type Props = {
 	firebase: Firebase;
@@ -51,6 +52,7 @@ export function AddNewEvent({ firebase, isVisible, onCloseBtnClick }: Props) {
 	return (
 		<div
 			className={`add-new-event-section ${isVisible ? 'visible' : 'hidden'}`}>
+			<EmojiPicker />
 			<div className='close-btn-wrapper'>
 				<RoundYellowButton label='x' onClick={onCloseBtnClick} />
 			</div>
