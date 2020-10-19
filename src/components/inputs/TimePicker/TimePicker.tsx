@@ -10,7 +10,9 @@ import {
 
 type Props = {
 	title: string;
+	emoji: string;
 	eventDate: Date;
+	keyOnSelectChange: string;
 	onSelectChange: <Type>(newValue: Type, key: string) => void;
 };
 
@@ -20,7 +22,13 @@ type State = {
 	dayPeriod: 'AM' | 'PM';
 };
 
-export function TimePicker({ title, eventDate, onSelectChange }: Props) {
+export function TimePicker({
+	title,
+	emoji,
+	eventDate,
+	keyOnSelectChange,
+	onSelectChange,
+}: Props) {
 	const [time, setTime] = useState<State>({
 		hours: 7,
 		minutes: 0,
@@ -30,21 +38,18 @@ export function TimePicker({ title, eventDate, onSelectChange }: Props) {
 	const { hours, minutes, dayPeriod } = time;
 
 	useEffect(() => {
-		const clock24Hour = CLOCK_24_FROM_CLOCK_12_HOURS(hours, dayPeriod);
+		const clock24Hour = makeCloc24FromClock12Hours(hours, dayPeriod);
 		const clock24Minutes = minutes === 0 ? '00' : minutes;
 
 		const newTimeString = `${eventDate.getFullYear()}-${
 			eventDate.getMonth() + 1
 		}-${eventDate.getDate()}T${clock24Hour}:${clock24Minutes}:00`;
 
-		onSelectChange(newTimeString, 'startTime');
+		onSelectChange(newTimeString, keyOnSelectChange);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [hours, minutes, dayPeriod]);
+	}, [hours, minutes, dayPeriod, eventDate]);
 
-	const CLOCK_24_FROM_CLOCK_12_HOURS = (
-		hour: number,
-		dayPeriod: 'AM' | 'PM',
-	) => {
+	const makeCloc24FromClock12Hours = (hour: number, dayPeriod: 'AM' | 'PM') => {
 		const HOURS_IN_DAY_PERIOD: number = 12;
 
 		if (dayPeriod === 'AM' && hour < 10) return `0${hour}`;
@@ -83,8 +88,8 @@ export function TimePicker({ title, eventDate, onSelectChange }: Props) {
 
 	return (
 		<div className='time-picker'>
-			<span className='time-icon' role='img' aria-label='clock-emoji'>
-				⏰
+			<span className='time-icon' role='img' aria-label='time-emoji'>
+				{emoji}
 			</span>
 			<span className='time-picker-title'>{title}</span>
 			<div className='time-picker-select-wrapper'>

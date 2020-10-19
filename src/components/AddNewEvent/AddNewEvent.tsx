@@ -8,6 +8,7 @@ import Firebase from '../Firebase/index';
 import { EmojiPicker } from '../buttons/EmojiPicker/EmojiPicker';
 import { BasicInput } from '../inputs/BasicInput/BasicInput';
 import { TimePicker } from '../inputs/TimePicker/TimePicker';
+import { NoteInput } from '../inputs/NoteInput/NoteInput';
 
 type Event = {
 	emoji: string | undefined;
@@ -84,22 +85,45 @@ export function AddNewEvent({
 	return (
 		<div
 			className={`add-new-event-section ${isVisible ? 'visible' : 'hidden'}`}>
-			<div className='emoji-picker-wrapper'>
+			<div className='input-wrapper'>
 				<EmojiPicker emoji={emoji} onEmojiChange={changeEventValue} />
 			</div>
-			<BasicInput
-				name='title'
-				value={title}
-				placeholder='Type your event name here...'
-				inputType='text'
-				color='transparent'
-				onChange={changeEventValue}
-			/>
-			<TimePicker
-				title='Event start'
-				eventDate={eventDate}
-				onSelectChange={changeEventValue}
-			/>
+			<div className='input-wrapper'>
+				<BasicInput
+					name='title'
+					value={title}
+					placeholder='Type your event name here...'
+					inputType='text'
+					color='transparent'
+					onChange={changeEventValue}
+				/>
+			</div>
+			<div className='input-wrapper'>
+				<TimePicker
+					title='Event start'
+					emoji='⏰'
+					eventDate={eventDate}
+					keyOnSelectChange='startTime'
+					onSelectChange={changeEventValue}
+				/>
+			</div>
+			<div className='input-wrapper'>
+				<TimePicker
+					title='Event end'
+					emoji='⌛'
+					eventDate={eventDate}
+					keyOnSelectChange='finishTime'
+					onSelectChange={changeEventValue}
+				/>
+			</div>
+			<div className='input-wrapper'>
+				<NoteInput
+					emoji='✏️'
+					title='Add a note'
+					keyOnSelectChange='notes'
+					onChange={changeEventValue}
+				/>
+			</div>
 			<div className='close-btn-wrapper'>
 				<RoundYellowButton label='x' onClick={onCloseBtnClick} />
 			</div>
