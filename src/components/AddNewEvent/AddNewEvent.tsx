@@ -4,11 +4,11 @@ import './AddNewEvent.css';
 
 import { RoundYellowButton } from '../buttons/RoundYellowButton/RoundYellowButton';
 
-import Firebase from '../Firebase/index';
 import { EmojiPicker } from '../buttons/EmojiPicker/EmojiPicker';
 import { BasicInput } from '../inputs/BasicInput/BasicInput';
 import { TimePicker } from '../inputs/TimePicker/TimePicker';
 import { NoteInput } from '../inputs/NoteInput/NoteInput';
+import { OvalYellowButton } from '../buttons/OvalYellowButton/OvalYellowButton';
 
 type Event = {
 	emoji: string | undefined;
@@ -20,17 +20,17 @@ type Event = {
 };
 
 type Props = {
-	firebase: Firebase;
 	isVisible: boolean;
 	eventDate: Date;
 	onCloseBtnClick: () => void;
+	onCreateNewEvent: (newEvent: Event) => void;
 };
 
 export function AddNewEvent({
-	firebase,
 	eventDate,
 	isVisible,
 	onCloseBtnClick,
+	onCreateNewEvent,
 }: Props) {
 	const [newEvent, setNewEvent] = useState<Event>({
 		emoji: '🥰',
@@ -40,47 +40,12 @@ export function AddNewEvent({
 		notes: '',
 		isPinned: false,
 	});
-	// useEffect(() => {
-	// 	//componentDidMount
-	// 	//componentDidUpdate
-	// 	// Create new task!!
-	// 	// const startTime = new Date(
-	// 	// 	visibleDate.getFullYear(),
-	// 	// 	visibleDate.getMonth(),
-	// 	// 	visibleDate.getDate(),
-	// 	// 	7,
-	// 	// );
-	// 	// const finishTime = new Date(
-	// 	// 	visibleDate.getFullYear(),
-	// 	// 	visibleDate.getMonth(),
-	// 	// 	visibleDate.getDate(),
-	// 	// 	8,
-	// 	// );
-	// 	// firebase.createNewTask(
-	// 	// 	user.uid,
-	// 	// 	visibleDate.getFullYear(),
-	// 	// 	visibleDate.getMonth(),
-	// 	// 	visibleDate.getDate(),
-	// 	// 	{
-	// 	// 		startTime: startTime.toString(),
-	// 	// 		finishTime: finishTime.toString(),
-	// 	// 		name: 'Wake up Buddy',
-	// 	// 		notes: 'Zoom call, kick off with Elena and Jordan from Shift.',
-	// 	// 		isPinned: false,
-	// 	// 	},
-	// 	// );
-	// 	// return () => {
-	// 	// 	// runs when componentDidUnmount
-	// 	// 	console.log('cleanup');
-	// 	// };
-	// });
 
 	const changeEventValue = <Type extends {}>(newValue: Type, key: string) => {
 		setNewEvent({ ...newEvent, [key]: newValue });
 	};
 
-	const { emoji, startTime, finishTime, title, notes, isPinned } = newEvent;
-	console.log('event changed', newEvent);
+	const { emoji, title } = newEvent;
 
 	return (
 		<div
@@ -124,6 +89,11 @@ export function AddNewEvent({
 					onChange={changeEventValue}
 				/>
 			</div>
+			<OvalYellowButton
+				text='Create event'
+				disabled={false}
+				onClick={() => onCreateNewEvent(newEvent)}
+			/>
 			<div className='close-btn-wrapper'>
 				<RoundYellowButton label='x' onClick={onCloseBtnClick} />
 			</div>

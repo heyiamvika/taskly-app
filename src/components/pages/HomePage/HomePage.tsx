@@ -8,16 +8,24 @@ import { UserInfo } from '../../UserInfo/UserInfo';
 import { AddNewEvent } from '../../AddNewEvent/AddNewEvent';
 
 import withAuthentification from '../../Session/withAuthentification';
-import Firebase, { withFirebase } from '../../Firebase/index';
+import Firebase from '../../Firebase/index';
 
 const UserInfoWithAuthentification = withAuthentification(UserInfo);
-const AddNewEventSection = withFirebase(AddNewEvent);
 
 type Props = {
 	firebase: Firebase;
 	user: {
 		uid: string;
 	};
+};
+
+type Event = {
+	emoji: string | undefined;
+	startTime: string;
+	finishTime: string;
+	title: string;
+	notes: string;
+	isPinned: boolean;
 };
 
 export function HomePage({ firebase, user }: Props) {
@@ -80,40 +88,18 @@ export function HomePage({ firebase, user }: Props) {
 	const openAddNewEventSection = () => setAddNewEventVisible(true);
 	const closeAddNewEventSection = () => setAddNewEventVisible(false);
 
+	const createNewEvent = (newEvent: Event) => {
+		firebase.createNewTask(
+			user.uid,
+			visibleDate.getFullYear(),
+			visibleDate.getMonth(),
+			visibleDate.getDate(),
+			newEvent,
+		);
+	};
+
 	useEffect(() => {
 		if (!user) return;
-		//componentDidMount
-		//componentDidUpdate
-
-		// Create new task!!
-
-		// const startTime = new Date(
-		// 	visibleDate.getFullYear(),
-		// 	visibleDate.getMonth(),
-		// 	visibleDate.getDate(),
-		// 	7,
-		// );
-
-		// const finishTime = new Date(
-		// 	visibleDate.getFullYear(),
-		// 	visibleDate.getMonth(),
-		// 	visibleDate.getDate(),
-		// 	8,
-		// );
-
-		// firebase.createNewTask(
-		// 	user.uid,
-		// 	visibleDate.getFullYear(),
-		// 	visibleDate.getMonth(),
-		// 	visibleDate.getDate(),
-		// 	{
-		// 		startTime: startTime.toString(),
-		// 		finishTime: finishTime.toString(),
-		// 		name: 'Wake up Buddy',
-		// 		notes: 'Zoom call, kick off with Elena and Jordan from Shift.',
-		// 		isPinned: false,
-		// 	},
-		// );
 
 		// fetch user's schedule for this month
 		async function fetchNewSchedule() {
@@ -149,10 +135,11 @@ export function HomePage({ firebase, user }: Props) {
 					onAddNewEventBtnClick={openAddNewEventSection}
 				/>
 				<UserInfoWithAuthentification />
-				<AddNewEventSection
+				<AddNewEvent
 					isVisible={addNewEventVisible}
-					onCloseBtnClick={closeAddNewEventSection}
 					eventDate={visibleDate}
+					onCloseBtnClick={closeAddNewEventSection}
+					onCreateNewEvent={createNewEvent}
 				/>
 			</div>
 		</div>

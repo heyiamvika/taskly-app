@@ -8,6 +8,7 @@ type Props = {
 	disabled: boolean;
 	to?: string;
 	type?: 'button' | 'submit';
+	onClick?: () => void;
 };
 
 export function OvalYellowButton({
@@ -15,6 +16,7 @@ export function OvalYellowButton({
 	disabled,
 	to,
 	type = 'button',
+	onClick,
 }: Props) {
 	return to ? (
 		<Link to={to}>
@@ -23,7 +25,11 @@ export function OvalYellowButton({
 			</button>
 		</Link>
 	) : (
-		<button type={type} className='oval-yellow-btn' disabled={disabled}>
+		<button
+			type={type}
+			className='oval-yellow-btn'
+			disabled={disabled}
+			onClick={onClick}>
 			{text}
 		</button>
 	);

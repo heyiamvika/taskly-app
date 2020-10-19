@@ -11,10 +11,11 @@ const config = {
 	messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
 
-type Task = {
+type Event = {
+	emoji: string | undefined;
 	startTime: string;
 	finishTime: string;
-	name: string;
+	title: string;
 	notes: string;
 	isPinned: boolean;
 };
@@ -72,9 +73,9 @@ class Firebase {
 		year: number,
 		month: number,
 		day: number,
-		task: Task,
+		event: Event,
 	) {
-		this.db.ref(`calendars/${uid}/${year}/${month}/${day}`).push(task);
+		this.db.ref(`calendars/${uid}/${year}/${month}/${day}`).push(event);
 	}
 
 	pinTask() {}
