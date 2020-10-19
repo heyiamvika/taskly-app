@@ -5,13 +5,7 @@ import { EventCard } from '../EventCard/EventCard';
 
 import './DaySchedule.css';
 
-type Event = {
-	startTime: string;
-	finishTime: string;
-	name: string;
-	notes: string;
-	isPinned: boolean;
-};
+import { Event } from '../../utils/types';
 
 type Props = {
 	visibleDay: Date;
@@ -33,7 +27,10 @@ export function DaySchedule({
 	const renderEventCards = () => {
 		if (dayEvents) {
 			const events = Object.values(dayEvents);
-			return events.map((event: Event) => <EventCard calendarEvent={event} />);
+			console.log(events);
+			return events.map((event: Event) => (
+				<EventCard key={event.title} calendarEvent={event} />
+			));
 		}
 	};
 

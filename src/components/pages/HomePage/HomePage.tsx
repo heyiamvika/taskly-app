@@ -10,6 +10,8 @@ import { AddNewEvent } from '../../AddNewEvent/AddNewEvent';
 import withAuthentification from '../../Session/withAuthentification';
 import Firebase from '../../Firebase/index';
 
+import { Event } from '../../../utils/types';
+
 const UserInfoWithAuthentification = withAuthentification(UserInfo);
 
 type Props = {
@@ -17,15 +19,6 @@ type Props = {
 	user: {
 		uid: string;
 	};
-};
-
-type Event = {
-	emoji: string | undefined;
-	startTime: string;
-	finishTime: string;
-	title: string;
-	notes: string;
-	isPinned: boolean;
 };
 
 export function HomePage({ firebase, user }: Props) {

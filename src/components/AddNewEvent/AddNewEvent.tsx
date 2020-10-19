@@ -10,14 +10,7 @@ import { TimePicker } from '../inputs/TimePicker/TimePicker';
 import { NoteInput } from '../inputs/NoteInput/NoteInput';
 import { OvalYellowButton } from '../buttons/OvalYellowButton/OvalYellowButton';
 
-type Event = {
-	emoji: string | undefined;
-	startTime: string;
-	finishTime: string;
-	title: string;
-	notes: string;
-	isPinned: boolean;
-};
+import { Event } from '../../utils/types';
 
 type Props = {
 	isVisible: boolean;

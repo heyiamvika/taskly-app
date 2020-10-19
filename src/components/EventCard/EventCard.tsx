@@ -2,20 +2,14 @@ import React from 'react';
 
 import './EventCard.css';
 
-type Event = {
-	startTime: string;
-	finishTime: string;
-	name: string;
-	notes: string;
-	isPinned: boolean;
-};
+import { Event } from '../../utils/types';
 
 type Props = {
 	calendarEvent: Event;
 };
 
 export function EventCard({
-	calendarEvent: { name, notes, startTime, finishTime },
+	calendarEvent: { title, notes, emoji, startTime, finishTime },
 }: Props) {
 	const makeStringFromTimeString = (timeString: string) => {
 		const date = new Date(timeString);
@@ -35,9 +29,10 @@ export function EventCard({
 	};
 
 	return (
-		<div className={`event-card ${getCardClass()}`} key={name}>
+		<div className={`event-card ${getCardClass()}`} key={title}>
+			<span className='event-emoji'>{emoji}</span>
 			<div className='event-information'>
-				<h4 className='event-card-name'>{name}</h4>
+				<h4 className='event-card-name'>{title}</h4>
 				<p className='event-notes'>{notes}</p>
 			</div>
 			<div className='event-time'>
