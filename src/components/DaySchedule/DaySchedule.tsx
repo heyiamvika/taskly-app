@@ -28,8 +28,8 @@ export function DaySchedule({
 		if (dayEvents) {
 			const events = Object.values(dayEvents);
 			console.log(events);
-			return events.map((event: Event) => (
-				<EventCard key={event.title} calendarEvent={event} />
+			return events.map((event: Event, index: number) => (
+				<EventCard key={index} calendarEvent={event} />
 			));
 		}
 	};

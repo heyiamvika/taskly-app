@@ -61,6 +61,19 @@ class Firebase {
 		return schedule;
 	}
 
+	subscribeToMonthlySchedule(
+		uid: string,
+		year: number,
+		month: number,
+		callback: (data: any) => void,
+	) {
+		const schedulesRef = this.db.ref(`calendars/${uid}/${year}/${month}`);
+
+		schedulesRef.on('child_added', function (data: any) {
+			callback(data.val());
+		});
+	}
+
 	createNewTask(
 		uid: string,
 		year: number,

@@ -89,13 +89,15 @@ export function HomePage({ firebase, user }: Props) {
 			visibleDate.getDate(),
 			newEvent,
 		);
+
+		closeAddNewEventSection();
 	};
 
 	useEffect(() => {
 		if (!user) return;
 
 		// fetch user's schedule for this month
-		async function fetchNewSchedule() {
+		const fetchNewSchedule = async () => {
 			const newSchedule = await firebase.getMonthlySchedule(
 				user.uid,
 				visibleDate.getFullYear(),
@@ -103,10 +105,19 @@ export function HomePage({ firebase, user }: Props) {
 			);
 
 			setMonthlySchedule(newSchedule);
-		}
-
+		};
 		fetchNewSchedule();
-	}, [currentDate, visibleDate, firebase, user]);
+
+		// subscribe to user's schedule;
+		const onDataChanged = (data: any) => setMonthlySchedule(data);
+		firebase.subscribeToMonthlySchedule(
+			user.uid,
+			visibleDate.getFullYear(),
+			visibleDate.getMonth(),
+			onDataChanged,
+		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [user]);
 
 	return (
 		<div className='home-page'>

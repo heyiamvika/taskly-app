@@ -1,8 +1,8 @@
 import React from 'react';
 
-import './EventCard.css';
-
 import { Event } from '../../utils/types';
+
+import './EventCard.css';
 
 type Props = {
 	calendarEvent: Event;
