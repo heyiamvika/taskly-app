@@ -152,6 +152,7 @@ export function HomePage({ firebase, user }: Props) {
 				<AddNewEventSection
 					isVisible={addNewEventVisible}
 					onCloseBtnClick={closeAddNewEventSection}
+					eventDate={visibleDate}
 				/>
 			</div>
 		</div>

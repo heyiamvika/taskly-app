@@ -7,6 +7,7 @@ import { RoundYellowButton } from '../buttons/RoundYellowButton/RoundYellowButto
 import Firebase from '../Firebase/index';
 import { EmojiPicker } from '../buttons/EmojiPicker/EmojiPicker';
 import { BasicInput } from '../inputs/BasicInput/BasicInput';
+import { TimePicker } from '../inputs/TimePicker/TimePicker';
 
 type Event = {
 	emoji: string | undefined;
@@ -20,10 +21,16 @@ type Event = {
 type Props = {
 	firebase: Firebase;
 	isVisible: boolean;
+	eventDate: Date;
 	onCloseBtnClick: () => void;
 };
 
-export function AddNewEvent({ firebase, isVisible, onCloseBtnClick }: Props) {
+export function AddNewEvent({
+	firebase,
+	eventDate,
+	isVisible,
+	onCloseBtnClick,
+}: Props) {
 	const [newEvent, setNewEvent] = useState<Event>({
 		emoji: '🥰',
 		startTime: '',
@@ -72,7 +79,7 @@ export function AddNewEvent({ firebase, isVisible, onCloseBtnClick }: Props) {
 	};
 
 	const { emoji, startTime, finishTime, title, notes, isPinned } = newEvent;
-	console.log(newEvent);
+	console.log('event changed', newEvent);
 
 	return (
 		<div
@@ -87,6 +94,11 @@ export function AddNewEvent({ firebase, isVisible, onCloseBtnClick }: Props) {
 				inputType='text'
 				color='transparent'
 				onChange={changeEventValue}
+			/>
+			<TimePicker
+				title='Event start'
+				eventDate={eventDate}
+				onSelectChange={changeEventValue}
 			/>
 			<div className='close-btn-wrapper'>
 				<RoundYellowButton label='x' onClick={onCloseBtnClick} />
