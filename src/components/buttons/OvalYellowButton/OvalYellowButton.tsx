@@ -18,13 +18,25 @@ export function OvalYellowButton({
 	type = 'button',
 	onClick,
 }: Props) {
-	return to ? (
-		<Link to={to}>
+	if (to) {
+		return (
+			<Link to={to}>
+				<button type={type} className='oval-yellow-btn' disabled={disabled}>
+					{text}
+				</button>
+			</Link>
+		);
+	}
+
+	if (type === 'submit') {
+		return (
 			<button type={type} className='oval-yellow-btn' disabled={disabled}>
 				{text}
 			</button>
-		</Link>
-	) : (
+		);
+	}
+
+	return (
 		<button
 			type={type}
 			className='oval-yellow-btn'
