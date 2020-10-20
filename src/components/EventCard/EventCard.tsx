@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Event } from '../../utils/types';
+import { EmojiIcon } from '../icons/EmojiIcon/EmojiIcon';
 
 import './EventCard.css';
 
@@ -30,7 +31,7 @@ export function EventCard({
 
 	return (
 		<div className={`event-card ${getCardClass()}`} key={title}>
-			<span className='event-emoji'>{emoji}</span>
+			<EmojiIcon emoji={emoji} />
 			<div className='event-information'>
 				<h4 className='event-card-name'>{title}</h4>
 				<p className='event-notes'>{notes}</p>
