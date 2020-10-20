@@ -9,9 +9,15 @@ import { SignUpPage } from './components/pages/SignUpPage/SignUpPage';
 import { LoginPage } from './components/pages/LoginPage/LoginPage';
 
 import { withFirebase } from './components/Firebase/index';
-import { AuthUserContext, withAuthentification } from './components/Session';
+import {
+	AuthUserContext,
+	withAuthentification,
+	withAuthorization,
+} from './components/Session';
 
-const HomePageWithFirebase = withFirebase(withAuthentification(HomePage));
+const HomePageWithFirebase = withFirebase(
+	withAuthentification(withAuthorization(HomePage)),
+);
 
 function App(props: any) {
 	const [user, setUser] = useState<{} | null>(null);
