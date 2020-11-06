@@ -15,6 +15,7 @@ import {
 	withAuthorization,
 } from './components/Session';
 
+// to-do: use compose + pipe from 'lodash-fp';
 const HomePageWithFirebase = withFirebase(
 	withAuthentification(withAuthorization(HomePage)),
 );
