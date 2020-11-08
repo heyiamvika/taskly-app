@@ -7,15 +7,15 @@ import * as serviceWorker from './serviceWorker';
 
 import Firebase, { FirebaseContext } from './components/Firebase/index';
 
-import store from './store/store';
-
+// Temporary code to test store
+import configireStore from './store/configureStore';
 import {
 	newEventAdded,
 	eventDetailsChanged,
 	eventDeleted,
-} from './store/actionCreators';
+} from './store/calendarEvents';
 
-// Temporary code to test store
+const store = configireStore();
 
 const unsubscribe = store.subscribe(() => {
 	console.log('Store changed', store.getState());

@@ -1,5 +1,53 @@
-import { Store, EventAction, Calendar, CalendarEvent } from './storeTypes';
-import * as actions from './actionTypes';
+import {
+	Store,
+	EventAction,
+	Calendar,
+	CalendarEvent,
+	AddEventAction,
+	ChangeEventDetailsAction,
+	DeleteEventAction,
+} from './storeTypes';
+
+// Action types
+const EVENT_DELETED = 'EVENT_DELETED';
+const NEW_EVENT_ADDED = 'NEW_EVENT_ADDED';
+const EVENT_DETAILS_CHANGED = 'EVENT_DETAILS_CHANGED';
+
+// Action creators
+export const newEventAdded = (
+	eventDate: string,
+	newEvent: CalendarEvent,
+): AddEventAction => ({
+	type: NEW_EVENT_ADDED,
+	payload: {
+		eventDate,
+		newEvent,
+	},
+});
+
+export const eventDeleted = (
+	eventDate: string,
+	id: number,
+): DeleteEventAction => ({
+	type: EVENT_DELETED,
+	payload: {
+		eventDate,
+		id,
+	},
+});
+
+export const eventDetailsChanged = (
+	eventDate: string,
+	id: number,
+	changedEvent: CalendarEvent,
+): ChangeEventDetailsAction => ({
+	type: EVENT_DETAILS_CHANGED,
+	payload: {
+		eventDate,
+		id,
+		changedEvent,
+	},
+});
 
 // temporary
 let nextId = 0;
@@ -15,21 +63,21 @@ export default function reducer(
 ): Store {
 	switch (action.type) {
 		// Events
-		case actions.NEW_EVENT_ADDED: {
+		case NEW_EVENT_ADDED: {
 			const { eventDate, newEvent } = action.payload;
 			return {
 				...state,
 				calendar: addEvent(state.calendar, eventDate, newEvent),
 			};
 		}
-		case actions.EVENT_DELETED: {
+		case EVENT_DELETED: {
 			const { eventDate, id } = action.payload;
 			return {
 				...state,
 				calendar: deleteEvent(state.calendar, eventDate, id),
 			};
 		}
-		case actions.EVENT_DETAILS_CHANGED: {
+		case EVENT_DETAILS_CHANGED: {
 			const { eventDate, id, changedEvent } = action.payload;
 
 			return {
@@ -42,6 +90,7 @@ export default function reducer(
 	}
 }
 
+// Helper functions
 function addEvent(
 	calendar: Calendar,
 	eventDate: string,
