@@ -28,7 +28,7 @@ export type Store = {
 	calendar: Calendar;
 };
 
-type AddEventAction = {
+export type AddEventAction = {
 	type: 'NEW_EVENT_ADDED';
 	payload: {
 		eventDate: string;
@@ -36,7 +36,7 @@ type AddEventAction = {
 	};
 };
 
-type DeleteEventAction = {
+export type DeleteEventAction = {
 	type: 'EVENT_DELETED';
 	payload: {
 		eventDate: string;
@@ -44,16 +44,16 @@ type DeleteEventAction = {
 	};
 };
 
-type ChangeEventDetails = {
+export type ChangeEventDetailsAction = {
 	type: 'EVENT_DETAILS_CHANGED';
 	payload: {
 		eventDate: string;
 		id: number;
-		newEvent: CalendarEvent;
+		changedEvent: CalendarEvent;
 	};
 };
 
 export type EventAction =
 	| AddEventAction
 	| DeleteEventAction
-	| ChangeEventDetails;
+	| ChangeEventDetailsAction;

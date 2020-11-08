@@ -1,4 +1,5 @@
 import { Store, EventAction, Calendar, CalendarEvent } from './storeTypes';
+import * as actions from './actionTypes';
 
 // temporary
 let nextId = 0;
@@ -14,26 +15,26 @@ export default function reducer(
 ): Store {
 	switch (action.type) {
 		// Events
-		case 'NEW_EVENT_ADDED': {
+		case actions.NEW_EVENT_ADDED: {
 			const { eventDate, newEvent } = action.payload;
 			return {
 				...state,
 				calendar: addEvent(state.calendar, eventDate, newEvent),
 			};
 		}
-		case 'EVENT_DELETED': {
+		case actions.EVENT_DELETED: {
 			const { eventDate, id } = action.payload;
 			return {
 				...state,
 				calendar: deleteEvent(state.calendar, eventDate, id),
 			};
 		}
-		case 'EVENT_DETAILS_CHANGED': {
-			const { eventDate, id, newEvent } = action.payload;
+		case actions.EVENT_DETAILS_CHANGED: {
+			const { eventDate, id, changedEvent } = action.payload;
 
 			return {
 				...state,
-				calendar: changeEvent(state.calendar, eventDate, id, newEvent),
+				calendar: changeEvent(state.calendar, eventDate, id, changedEvent),
 			};
 		}
 		default:
@@ -60,10 +61,10 @@ function changeEvent(
 	calendar: Calendar,
 	eventDate: string,
 	eventId: number,
-	newEvent: CalendarEvent,
+	changedEvent: CalendarEvent,
 ): Calendar {
 	const changedEvents = calendar[eventDate].map((event) =>
-		event.id === eventId ? { ...event, ...newEvent } : event,
+		event.id === eventId ? { ...event, ...changedEvent } : event,
 	);
 	return { ...calendar, [eventDate]: changedEvents };
 }

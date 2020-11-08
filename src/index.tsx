@@ -9,53 +9,43 @@ import Firebase, { FirebaseContext } from './components/Firebase/index';
 
 import store from './store/store';
 
+import {
+	newEventAdded,
+	eventDetailsChanged,
+	eventDeleted,
+} from './store/actionCreators';
+
 // Temporary code to test store
+
+const unsubscribe = store.subscribe(() => {
+	console.log('Store changed', store.getState());
+});
+
 const date = new Date();
 
-store.dispatch({
-	type: 'NEW_EVENT_ADDED',
-	payload: {
-		eventDate: '25/10/2020',
-		newEvent: {
-			title: 'My new test event',
-			notes: '',
-			timeEnd: date,
-			timeStart: date,
-			emoji: '',
-			attendees: [],
-		},
-	},
-});
+store.dispatch(
+	newEventAdded('25/10/2020', {
+		title: 'My new test event',
+		notes: '',
+		timeEnd: date,
+		timeStart: date,
+		emoji: '',
+		attendees: [],
+	}),
+);
 
-console.log(store.getState());
+store.dispatch(
+	eventDetailsChanged('25/10/2020', 1, {
+		title: 'My changed test event',
+		notes: 'Hemlo',
+		timeEnd: date,
+		timeStart: date,
+		emoji: '',
+		attendees: [],
+	}),
+);
 
-store.dispatch({
-	type: 'EVENT_DETAILS_CHANGED',
-	payload: {
-		eventDate: '25/10/2020',
-		id: 1,
-		newEvent: {
-			title: 'My changed test event',
-			notes: 'Hemlo',
-			timeEnd: date,
-			timeStart: date,
-			emoji: '',
-			attendees: [],
-		},
-	},
-});
-
-console.log(store.getState());
-
-store.dispatch({
-	type: 'EVENT_DELETED',
-	payload: {
-		eventDate: '25/10/2020',
-		id: 1,
-	},
-});
-
-console.log(store.getState());
+store.dispatch(eventDeleted('25/10/2020', 1));
 
 ReactDOM.render(
 	<React.StrictMode>
