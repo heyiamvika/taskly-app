@@ -1,4 +1,4 @@
-type StoreUser = {
+type User = {
 	fullName: string;
 	email: string;
 	password: string;
@@ -6,7 +6,7 @@ type StoreUser = {
 	userId: string;
 };
 
-type StoreCalendarEvent = {
+export type CalendarEvent = {
 	title: string;
 	notes: string;
 	timeStart: Date;
@@ -15,20 +15,24 @@ type StoreCalendarEvent = {
 	attendees: string[];
 };
 
+type CalendarEventWithId = CalendarEvent & {
+	id: number;
+};
+
+export type Calendar = {
+	[date: string]: CalendarEventWithId[];
+};
+
 export type Store = {
-	currentUser: StoreUser | null;
-	calendarEvents: {
-		[date: string]: {
-			[id: string]: StoreCalendarEvent;
-		};
-	};
+	currentUser: User | null;
+	calendar: Calendar;
 };
 
 type AddEventAction = {
 	type: 'NEW_EVENT_ADDED';
 	payload: {
 		eventDate: string;
-		newEvent: StoreCalendarEvent;
+		newEvent: CalendarEvent;
 	};
 };
 
@@ -36,7 +40,7 @@ type DeleteEventAction = {
 	type: 'EVENT_DELETED';
 	payload: {
 		eventDate: string;
-		id: string;
+		id: number;
 	};
 };
 
@@ -44,8 +48,8 @@ type ChangeEventDetails = {
 	type: 'EVENT_DETAILS_CHANGED';
 	payload: {
 		eventDate: string;
-		id: string;
-		newEvent: StoreCalendarEvent;
+		id: number;
+		newEvent: CalendarEvent;
 	};
 };
 
