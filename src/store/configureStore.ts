@@ -1,7 +1,6 @@
-import { createStore } from 'redux';
 import reducer from './calendarEvents';
-import { devToolsEnhancer } from 'redux-devtools-extension';
+import { configureStore } from '@reduxjs/toolkit';
 
-export default function configireStore() {
-	return createStore(reducer, devToolsEnhancer({}));
+export default function () {
+	return configureStore({ reducer });
 }

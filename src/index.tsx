@@ -24,28 +24,35 @@ const unsubscribe = store.subscribe(() => {
 const date = new Date();
 
 store.dispatch(
-	newEventAdded('25/10/2020', {
-		title: 'My new test event',
-		notes: '',
-		timeEnd: date,
-		timeStart: date,
-		emoji: '',
-		attendees: [],
+	newEventAdded({
+		eventDate: '25/10/2020',
+		newEvent: {
+			title: 'My new test event',
+			notes: '',
+			timeEnd: date,
+			timeStart: date,
+			emoji: '',
+			attendees: [],
+		},
 	}),
 );
 
 store.dispatch(
-	eventDetailsChanged('25/10/2020', 1, {
-		title: 'My changed test event',
-		notes: 'Hemlo',
-		timeEnd: date,
-		timeStart: date,
-		emoji: '',
-		attendees: [],
+	eventDetailsChanged({
+		eventDate: '25/10/2020',
+		id: 1,
+		changedEvent: {
+			title: 'My changed test event',
+			notes: 'Hemlo',
+			timeEnd: date,
+			timeStart: date,
+			emoji: '',
+			attendees: [],
+		},
 	}),
 );
 
-store.dispatch(eventDeleted('25/10/2020', 1));
+store.dispatch(eventDeleted({ eventDate: '25/10/2020', id: 1 }));
 
 ReactDOM.render(
 	<React.StrictMode>

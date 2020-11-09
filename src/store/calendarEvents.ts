@@ -1,53 +1,22 @@
-import {
-	Store,
-	EventAction,
-	Calendar,
-	CalendarEvent,
-	AddEventAction,
-	ChangeEventDetailsAction,
-	DeleteEventAction,
-} from './storeTypes';
+import { Store, Calendar, CalendarEvent } from './storeTypes';
+import { createAction, createReducer } from '@reduxjs/toolkit';
 
-// Action types
-const EVENT_DELETED = 'EVENT_DELETED';
-const NEW_EVENT_ADDED = 'NEW_EVENT_ADDED';
-const EVENT_DETAILS_CHANGED = 'EVENT_DETAILS_CHANGED';
+// Action creators (Redux DevTools);
+export const newEventAdded = createAction<{
+	eventDate: string;
+	newEvent: CalendarEvent;
+}>('NEW_EVENT_ADDED');
 
-// Action creators
-export const newEventAdded = (
-	eventDate: string,
-	newEvent: CalendarEvent,
-): AddEventAction => ({
-	type: NEW_EVENT_ADDED,
-	payload: {
-		eventDate,
-		newEvent,
-	},
-});
+export const eventDeleted = createAction<{
+	eventDate: string;
+	id: number;
+}>('EVENT_DELETED');
 
-export const eventDeleted = (
-	eventDate: string,
-	id: number,
-): DeleteEventAction => ({
-	type: EVENT_DELETED,
-	payload: {
-		eventDate,
-		id,
-	},
-});
-
-export const eventDetailsChanged = (
-	eventDate: string,
-	id: number,
-	changedEvent: CalendarEvent,
-): ChangeEventDetailsAction => ({
-	type: EVENT_DETAILS_CHANGED,
-	payload: {
-		eventDate,
-		id,
-		changedEvent,
-	},
-});
+export const eventDetailsChanged = createAction<{
+	eventDate: string;
+	id: number;
+	changedEvent: CalendarEvent;
+}>('EVENT_DETAILS_CHANGED');
 
 // temporary
 let nextId = 0;
@@ -57,91 +26,43 @@ const initialStore: Store = {
 	calendar: {},
 };
 
-export default function reducer(
-	state: Store = initialStore,
-	action: EventAction,
-): Store {
-	switch (action.type) {
-		// Events
-		case NEW_EVENT_ADDED: {
-			const { eventDate, newEvent } = action.payload;
-			return {
-				...state,
-				calendar: addEvent(state.calendar, eventDate, newEvent),
-			};
+export default createReducer(initialStore, {
+	[newEventAdded.type]: (state, action) => {
+		const { calendar } = state;
+		const { eventDate, newEvent } = action.payload;
+		const eventToAdd = { ...newEvent, id: ++nextId };
+
+		if (!hasDateInCalendar(calendar, eventDate)) {
+			calendar[eventDate] = [];
 		}
-		case EVENT_DELETED: {
-			const { eventDate, id } = action.payload;
-			return {
-				...state,
-				calendar: deleteEvent(state.calendar, eventDate, id),
-			};
+
+		calendar[eventDate].push(eventToAdd);
+	},
+	[eventDeleted.type]: (state, action) => {
+		const { calendar } = state;
+		const { eventDate, id } = action.payload;
+
+		calendar[eventDate] = calendar[eventDate].filter(
+			(event) => event.id !== id,
+		);
+
+		if (isDayEmpty(calendar[eventDate])) {
+			delete calendar[eventDate];
 		}
-		case EVENT_DETAILS_CHANGED: {
-			const { eventDate, id, changedEvent } = action.payload;
+	},
+	[eventDetailsChanged.type]: (state, action) => {
+		const { calendar } = state;
+		const { eventDate, id, changedEvent } = action.payload;
 
-			return {
-				...state,
-				calendar: changeEvent(state.calendar, eventDate, id, changedEvent),
-			};
-		}
-		default:
-			return state;
-	}
-}
+		calendar[eventDate] = calendar[eventDate].map((event) =>
+			event.id === id ? changedEvent : event,
+		);
+	},
+});
 
-// Helper functions
-function addEvent(
-	calendar: Calendar,
-	eventDate: string,
-	newEvent: CalendarEvent,
-): Calendar {
-	const eventToAdd = { ...newEvent, id: ++nextId };
+// helper functions
+const isDayEmpty = (dayEvents: CalendarEvent[]): boolean =>
+	dayEvents.length === 0;
 
-	return {
-		...calendar,
-		[eventDate]: hasDateInCalendar(calendar, eventDate)
-			? [...calendar[eventDate], eventToAdd]
-			: [eventToAdd],
-	};
-}
-
-function changeEvent(
-	calendar: Calendar,
-	eventDate: string,
-	eventId: number,
-	changedEvent: CalendarEvent,
-): Calendar {
-	const changedEvents = calendar[eventDate].map((event) =>
-		event.id === eventId ? { ...event, ...changedEvent } : event,
-	);
-	return { ...calendar, [eventDate]: changedEvents };
-}
-
-function deleteEvent(
-	calendar: Calendar,
-	eventDate: string,
-	eventId: number,
-): Calendar {
-	const newCalendarDayEvents = calendar[eventDate].filter(
-		(event) => event.id !== eventId,
-	);
-
-	return isDayEmpty(newCalendarDayEvents)
-		? deleteDate(calendar, eventDate)
-		: { ...calendar, [eventDate]: newCalendarDayEvents };
-}
-
-function deleteDate(calendar: Calendar, date: string): Calendar {
-	const calendarCopy = { ...calendar };
-	delete calendarCopy[date];
-	return calendarCopy;
-}
-
-function isDayEmpty(dayEvents: CalendarEvent[]): boolean {
-	return dayEvents.length === 0;
-}
-
-function hasDateInCalendar(calendar: Calendar, date: string): boolean {
-	return calendar.hasOwnProperty(date);
-}
+const hasDateInCalendar = (calendar: Calendar, date: string): boolean =>
+	calendar.hasOwnProperty(date);
