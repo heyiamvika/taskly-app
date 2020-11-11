@@ -13,6 +13,8 @@ import {
 	newEventAdded,
 	eventDetailsChanged,
 	eventDeleted,
+	getEventsForDate,
+	getEventsBooleansForMonth,
 } from './store/calendarEvents';
 import { signup, login, logout } from './store/auth';
 
@@ -75,7 +77,8 @@ store.dispatch(
 	}),
 );
 
-store.dispatch(eventDeleted({ eventDate: '25/10/2020', id: 1 }));
+console.log(getEventsForDate(store.getState())('25/10/2020'));
+console.log(getEventsBooleansForMonth(store.getState())('2020', '10'));
 
 ReactDOM.render(
 	<React.StrictMode>

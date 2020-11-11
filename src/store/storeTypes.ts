@@ -24,3 +24,12 @@ type CalendarEventWithId = CalendarEvent & {
 export type Calendar = {
 	[date: string]: CalendarEventWithId[];
 };
+
+export type Store = {
+	auth: {
+		user: User;
+	};
+	entities: {
+		calendarEvents: Calendar;
+	};
+};
