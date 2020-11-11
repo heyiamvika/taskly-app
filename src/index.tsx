@@ -14,12 +14,35 @@ import {
 	eventDetailsChanged,
 	eventDeleted,
 } from './store/calendarEvents';
+import { signup, login, logout } from './store/auth';
 
 const store = configireStore();
 
 const unsubscribe = store.subscribe(() => {
 	console.log('Store changed', store.getState());
 });
+
+store.dispatch(
+	signup({
+		fullName: 'Vika',
+		email: 'viktoriian@wix.com',
+		password: '12344',
+		userId: '1',
+		profileImage: '',
+	}),
+);
+
+store.dispatch(logout());
+
+store.dispatch(
+	login({
+		fullName: 'Anya',
+		email: 'viktoriian@wix.com',
+		password: '12344',
+		userId: '1',
+		profileImage: '',
+	}),
+);
 
 const date = new Date();
 

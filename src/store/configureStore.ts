@@ -1,4 +1,4 @@
-import reducer from './calendarEvents';
+import reducer from './reducer';
 import { configureStore } from '@reduxjs/toolkit';
 
 export default function () {

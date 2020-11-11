@@ -1,47 +1,40 @@
-import { Store, Calendar, CalendarEvent } from './storeTypes';
+import { Calendar, CalendarEvent } from './storeTypes';
 import { createSlice } from '@reduxjs/toolkit';
 
 // temporary
 let nextId = 0;
+const initialState: Calendar = {};
 
-const initialState: Store = {
-	currentUser: null,
-	calendar: {},
-};
-
-const slice = createSlice({
-	name: 'app',
+const calendarEventsSlice = createSlice({
+	name: 'calendarEvents',
 	initialState,
 	reducers: {
-		newEventAdded: (state, action) => {
-			const { calendar } = state;
+		newEventAdded: (calendarEvents: Calendar, action) => {
 			const { eventDate, newEvent } = action.payload;
 			const eventToAdd = { ...newEvent, id: ++nextId };
 
-			if (!hasDateInCalendar(calendar, eventDate)) {
-				calendar[eventDate] = [];
+			if (!hasDateInCalendar(calendarEvents, eventDate)) {
+				calendarEvents[eventDate] = [];
 			}
 
-			calendar[eventDate].push(eventToAdd);
+			calendarEvents[eventDate].push(eventToAdd);
 		},
-		eventDeleted: (state, action) => {
-			const { calendar } = state;
+		eventDeleted: (calendarEvents: Calendar, action) => {
 			const { eventDate, id } = action.payload;
 
-			calendar[eventDate] = calendar[eventDate].filter(
+			calendarEvents[eventDate] = calendarEvents[eventDate].filter(
 				(event) => event.id !== id,
 			);
 
-			if (isDayEmpty(calendar[eventDate])) {
-				delete calendar[eventDate];
+			if (isDayEmpty(calendarEvents[eventDate])) {
+				delete calendarEvents[eventDate];
 			}
 		},
-		eventDetailsChanged: (state, action) => {
-			const { calendar } = state;
+		eventDetailsChanged: (calendarEvents: Calendar, action) => {
 			const { eventDate, id, changedEvent } = action.payload;
 			const eventToChange = { ...changedEvent, id };
 
-			calendar[eventDate] = calendar[eventDate].map((event) =>
+			calendarEvents[eventDate] = calendarEvents[eventDate].map((event) =>
 				event.id === id ? eventToChange : event,
 			);
 		},
@@ -52,8 +45,8 @@ export const {
 	newEventAdded,
 	eventDeleted,
 	eventDetailsChanged,
-} = slice.actions;
-export default slice.reducer;
+} = calendarEventsSlice.actions;
+export default calendarEventsSlice.reducer;
 
 // helper functions
 const isDayEmpty = (dayEvents: CalendarEvent[]): boolean =>
