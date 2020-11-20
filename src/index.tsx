@@ -1,5 +1,5 @@
 // JS entrypoint
-import React from 'react';
+import React, { Dispatch } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -17,11 +17,19 @@ import {
 	getEventsBooleansForMonth,
 } from './store/calendarEvents';
 import { signup, login, logout } from './store/auth';
+import { StateFromReducersMapObject } from 'redux';
 
 const store = configireStore();
 
 const unsubscribe = store.subscribe(() => {
 	console.log('Store changed', store.getState());
+});
+
+store.dispatch(() => {
+	store.dispatch({
+		type: 'bugsReceived',
+		bugs: [1, 2, 3],
+	});
 });
 
 store.dispatch(
@@ -76,9 +84,6 @@ store.dispatch(
 		},
 	}),
 );
-
-console.log(getEventsForDate(store.getState())('25/10/2020'));
-console.log(getEventsBooleansForMonth(store.getState())('2020', '10'));
 
 ReactDOM.render(
 	<React.StrictMode>
