@@ -20,8 +20,9 @@ export const authSlice = createSlice({
 			state.loading = true;
 			state.error = null;
 		},
-		authFailed: (state) => {
+		authFailed: (state, action) => {
 			state.loading = false;
+			state.error = action.payload;
 		},
 		userAuthorized: (state, action) => {
 			state.user = action.payload;
@@ -78,4 +79,9 @@ export const isUserLoggedIn = createSelector(
 export const getUserId = createSelector(
 	(state: RootState) => state.auth.user,
 	(user) => (user ? user.id : null),
+);
+
+export const getAuthError = createSelector(
+	(state: RootState) => state.auth.error,
+	(error) => error,
 );

@@ -1,57 +1,74 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-
-import * as ROUTES from '../../../utils/routes';
+import React, { FormEvent, useState, useEffect } from 'react';
 
 import './LoginForm.css';
 
 import { OvalYellowButton } from '../../buttons/OvalYellowButton/OvalYellowButton';
 import { BasicInput } from '../../inputs/BasicInput/BasicInput';
 
-// type Props = {
-// 	// TO_DO: what is the correct type for it?
-// 	firebase: any;
-// };
+//Redux imports
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	subscribeToUserAuthStateChanges,
+	login,
+	isUserLoggedIn,
+	getAuthError,
+} from '../../../store/auth';
 
-type User = {
-	email: string;
-	password: string;
-	error: Error | null;
+// Router imports
+import { withRouter } from 'react-router-dom';
+import * as ROUTES from '../../../utils/routes';
+
+// TO_DO: change type of props
+type Props = {
+	history: any;
 };
 
-export function LoginForm(props: any) {
-	const [user, setUser] = useState<User>({
+type LoginUserDetails = {
+	email: string;
+	password: string;
+};
+
+function LoginForm(props: Props) {
+	const [loginUserDetails, setLoginUserDetails] = useState<LoginUserDetails>({
 		email: '',
 		password: '',
-		error: null,
+	});
+
+	const dispatch = useDispatch();
+	const userLoggedIn = useSelector(isUserLoggedIn);
+	const authError = useSelector(getAuthError);
+
+	// Run only on component load
+	// TO_DO: use it on top of the app
+	useEffect(() => {
+		dispatch(subscribeToUserAuthStateChanges());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		if (userLoggedIn)
+			// Redirect to Main Screen
+			props.history.push(ROUTES.MAIN_SCREEN);
 	});
 
 	const onFormSubmit = (event: FormEvent<HTMLFormElement>): void => {
 		event.preventDefault();
-
-		const { email, password } = user;
-
-		props.firebase
-			.signInWithEmailAndPassword(email, password)
-			.then((authUser: User) => {
-				setUser({ ...user, ...authUser });
-				props.history.push(ROUTES.MAIN_SCREEN);
-			})
-			.catch((error: Error) => {
-				setUser({ ...user, error });
-			});
+		const { email, password } = loginUserDetails;
+		dispatch(login(email, password));
 	};
 
-	const onInputChange = <Type extends {}>(newValue: Type, key: string) => {
-		setUser({ ...user, [key]: newValue });
+	const onInputChange = (newValue: string, key: string) => {
+		setLoginUserDetails({ ...loginUserDetails, [key]: newValue });
 	};
 
-	const isInvalid: boolean = !user.email || !user.password;
+	const isInvalid: boolean =
+		!loginUserDetails.email || !loginUserDetails.password;
 
 	return (
 		<form className='signup-form' onSubmit={onFormSubmit}>
 			<BasicInput
 				name='email'
-				value={user.email}
+				value={loginUserDetails.email}
 				onChange={onInputChange}
 				inputType='text'
 				placeholder='Email Address'
@@ -59,16 +76,18 @@ export function LoginForm(props: any) {
 			/>
 			<BasicInput
 				name='password'
-				value={user.password}
+				value={loginUserDetails.password}
 				onChange={onInputChange}
 				inputType='password'
 				placeholder='Password'
 				color='yellow'
 			/>
-			{user.error && <p className='signup-error'>{user.error.message}</p>}
+			{authError && <p className='signup-error'>{authError}</p>}
 			<div className='submit-btn'>
 				<OvalYellowButton text='Login' type='submit' disabled={isInvalid} />
 			</div>
 		</form>
 	);
 }
+
+export default withRouter(LoginForm);

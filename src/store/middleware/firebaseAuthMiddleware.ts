@@ -30,8 +30,6 @@ const firebaseAuthMiddleware: Middleware<{}, RootState> = ({ dispatch }) => (
 					break;
 				}
 				case firebaseActions.userSignupCallBegun.type: {
-					console.log('user signup call begin');
-
 					const { email, password } = action.payload;
 					await signupUser(email, password);
 					break;
@@ -49,20 +47,16 @@ const firebaseAuthMiddleware: Middleware<{}, RootState> = ({ dispatch }) => (
 					break;
 			}
 		} catch (error) {
-			console.log('error occured');
-
 			const { onError } = action.payload;
 
 			// Default
 			dispatch(firebaseActions.firebaseCallFailed(error.message));
 
 			// For custom error actions
-			if (onError) {
-				dispatch({
-					type: onError,
-					payload: error.message,
-				});
-			}
+			dispatch({
+				type: onError,
+				payload: error.message,
+			});
 		}
 	}
 
@@ -78,36 +72,27 @@ const subscribeToUserAuth = (
 	onStart: string,
 ) =>
 	auth.onAuthStateChanged((user) => {
-		console.log('user changed', user);
 		// For loading indicators
-		if (onStart) dispatch({ type: onStart });
+		dispatch({ type: onStart });
+
+		// Default
+		dispatch(firebaseActions.firebaseCallSuccess());
 
 		if (user) {
-			// Default
+			// User logged in
 			const { displayName: fullName, email, photoURL: profileImage } = user;
 
-			dispatch(
-				firebaseActions.firebaseCallSuccess({ fullName, email, profileImage }),
-			);
-
-			if (onAuthorized) {
-				dispatch({
-					type: onAuthorized,
-					payload: {
-						fullName,
-						email,
-						profileImage,
-					},
-				});
-			}
+			dispatch({
+				type: onAuthorized,
+				payload: {
+					fullName,
+					email,
+					profileImage,
+				},
+			});
 		} else {
-			dispatch(firebaseActions.firebaseCallSuccess({}));
-
-			if (onLoggedOut) {
-				dispatch({
-					type: onLoggedOut,
-				});
-			}
+			// User logged out
+			dispatch({ type: onLoggedOut });
 		}
 	});
 

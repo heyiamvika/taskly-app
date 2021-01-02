@@ -1,12 +1,11 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 
 import * as ROUTES from '../../../utils/routes';
 
 import './LoginPage.css';
 
 import { PlainTextYellowButton } from '../../buttons/PlainTextYellowButton/PlainTextYellowButton';
-import { LoginForm } from '../../forms/LoginForm/LoginForm';
+import LoginForm from '../../forms/LoginForm/LoginForm';
 
 export function LoginPage() {
 	return (

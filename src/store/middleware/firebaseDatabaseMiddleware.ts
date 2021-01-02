@@ -74,7 +74,7 @@ const subscribeToDatabase = (
 		const result = snapshot.val();
 
 		// Default
-		dispatch(firebaseActions.firebaseCallSuccess(result));
+		dispatch(firebaseActions.firebaseCallSuccess());
 
 		// For custom success actions
 		if (onSuccess) {

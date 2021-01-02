@@ -15,8 +15,10 @@ import {
 	subscribeToUserAuthStateChanges,
 	signup,
 	isUserLoggedIn,
+	getAuthError,
 } from '../../../store/auth';
 
+// TO_DO: change type of props
 type Props = {
 	history: any;
 };
@@ -26,7 +28,6 @@ type FormUserDetails = {
 	email: string;
 	passwordOne: string;
 	passwordTwo: string;
-	error: Error | null;
 };
 
 function SignupForm(props: Props) {
@@ -35,11 +36,11 @@ function SignupForm(props: Props) {
 		email: '',
 		passwordOne: '',
 		passwordTwo: '',
-		error: null,
 	});
 
 	const dispatch = useDispatch();
 	const userLoggedIn = useSelector(isUserLoggedIn);
+	const authError = useSelector(getAuthError);
 
 	// Run only on component load
 	useEffect(() => {
@@ -48,11 +49,9 @@ function SignupForm(props: Props) {
 	}, []);
 
 	useEffect(() => {
-		if (userLoggedIn) {
+		if (userLoggedIn)
 			// Redirect to Main Screen
 			props.history.push(ROUTES.MAIN_SCREEN);
-			return;
-		}
 	});
 
 	const onFormSubmit = (event: FormEvent<HTMLFormElement>): void => {
@@ -106,9 +105,7 @@ function SignupForm(props: Props) {
 				placeholder='Confirm Password'
 				color='yellow'
 			/>
-			{formUserDetails.error && (
-				<p className='signup-error'>{formUserDetails.error.message}</p>
-			)}
+			{authError && <p className='signup-error'>{authError}</p>}
 			<div className='submit-btn'>
 				<OvalYellowButton text='Signup' type='submit' disabled={isInvalid} />
 			</div>
