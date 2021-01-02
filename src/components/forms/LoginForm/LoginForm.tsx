@@ -7,12 +7,7 @@ import { BasicInput } from '../../inputs/BasicInput/BasicInput';
 
 //Redux imports
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	subscribeToUserAuthStateChanges,
-	login,
-	isUserLoggedIn,
-	getAuthError,
-} from '../../../store/auth';
+import { login, isUserLoggedIn, getAuthError } from '../../../store/auth';
 
 // Router imports
 import { withRouter } from 'react-router-dom';
@@ -37,13 +32,6 @@ function LoginForm(props: Props) {
 	const dispatch = useDispatch();
 	const userLoggedIn = useSelector(isUserLoggedIn);
 	const authError = useSelector(getAuthError);
-
-	// Run only on component load
-	// TO_DO: use it on top of the app
-	useEffect(() => {
-		dispatch(subscribeToUserAuthStateChanges());
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	useEffect(() => {
 		if (userLoggedIn)

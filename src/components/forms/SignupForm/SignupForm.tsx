@@ -11,12 +11,7 @@ import * as ROUTES from '../../../utils/routes';
 
 //Redux imports
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	subscribeToUserAuthStateChanges,
-	signup,
-	isUserLoggedIn,
-	getAuthError,
-} from '../../../store/auth';
+import { signup, isUserLoggedIn, getAuthError } from '../../../store/auth';
 
 // TO_DO: change type of props
 type Props = {
@@ -41,12 +36,6 @@ function SignupForm(props: Props) {
 	const dispatch = useDispatch();
 	const userLoggedIn = useSelector(isUserLoggedIn);
 	const authError = useSelector(getAuthError);
-
-	// Run only on component load
-	useEffect(() => {
-		dispatch(subscribeToUserAuthStateChanges());
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	useEffect(() => {
 		if (userLoggedIn)
