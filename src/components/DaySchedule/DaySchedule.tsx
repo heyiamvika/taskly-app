@@ -5,8 +5,6 @@ import { EventCard } from '../EventCard/EventCard';
 
 import './DaySchedule.css';
 
-import { Event } from '../../utils/types';
-
 type Props = {
 	visibleDay: Date;
 	dayEvents: object | null;

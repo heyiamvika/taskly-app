@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import './WelcomePage.css';
 
@@ -10,7 +10,12 @@ import * as ROUTES from '../../../utils/routes';
 import { OvalYellowButton } from '../../buttons/OvalYellowButton/OvalYellowButton';
 import { PlainTextYellowButton } from '../../buttons/PlainTextYellowButton/PlainTextYellowButton';
 
+import StoreContext from '../../../contexts/storeContext';
+
 export function WelcomePage() {
+	const store = useContext(StoreContext);
+	console.log(store.getState());
+
 	return (
 		<div className='welcome-page'>
 			<img className='logo' src={logo} alt='taskly-logo' />

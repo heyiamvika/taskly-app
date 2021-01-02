@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, ThunkAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 
 import { isObjectEmpty } from '../utils/helperFunctions';

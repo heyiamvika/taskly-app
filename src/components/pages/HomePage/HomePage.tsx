@@ -7,8 +7,6 @@ import { DaySchedule } from '../../DaySchedule/DaySchedule';
 import { UserInfo } from '../../UserInfo/UserInfo';
 import { AddNewEvent } from '../../AddNewEvent/AddNewEvent';
 
-import { Event } from '../../../utils/types';
-
 type Props = {
 	user: {
 		uid: string;
