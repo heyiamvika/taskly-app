@@ -1,23 +1,82 @@
-import { User, LoggedInUser } from './storeTypes';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { createSelector } from 'reselect';
 
-const initialState: { user: User } = { user: null };
+import * as firebaseActions from './firebase/firebaseActions';
 
-const userSlice = createSlice({
+import { AuthState } from './store-types/auth';
+import { RootState } from './store-types/root';
+
+const initialState: AuthState = {
+	user: null,
+	loading: false,
+};
+
+export const authSlice = createSlice({
 	name: 'auth',
 	initialState,
 	reducers: {
-		signup: (state, action: PayloadAction<LoggedInUser>) => {
-			state.user = action.payload;
+		authStarted: (state) => {
+			state.loading = true;
 		},
-		login: (state, action: PayloadAction<LoggedInUser>) => {
-			state.user = action.payload;
+		authFailed: (state) => {
+			state.loading = false;
 		},
-		logout: (state) => {
+		userAuthorized: (state, action) => {
+			state.user = action.payload;
+			state.loading = false;
+		},
+		userLoggedOut: (state) => {
 			state.user = null;
+			state.loading = false;
 		},
 	},
 });
 
-export const { signup, login, logout } = userSlice.actions;
-export default userSlice.reducer;
+export const {
+	userAuthorized,
+	userLoggedOut,
+	authStarted,
+	authFailed,
+} = authSlice.actions;
+export default authSlice.reducer;
+
+// Action creators
+export const subscribeToUserAuthStateChanges = () => {
+	return firebaseActions.subscribeAuthCallBegan({
+		onAuthorized: userAuthorized.type,
+		onLoggedOut: userLoggedOut.type,
+		onStart: authStarted.type,
+		onError: authFailed.type,
+	});
+};
+
+export const signup = (email: string, password: string) =>
+	firebaseActions.userSignupCallBegun({
+		email,
+		password,
+		onError: authFailed.type,
+	});
+
+export const login = (email: string, password: string) =>
+	firebaseActions.userLoginCallBegun({
+		email,
+		password,
+		onError: authFailed.type,
+	});
+
+export const logout = () => firebaseActions.userLogoutCallBegun();
+
+// Selectors
+export const isUserLoggedIn = () => {
+	createSelector(
+		(state: RootState) => state.auth.user,
+		(user) => Boolean(user),
+	);
+};
+
+export const getUserId = () => {
+	createSelector(
+		(state: RootState) => state.auth.user,
+		(user) => (user ? user.id : null),
+	);
+};
