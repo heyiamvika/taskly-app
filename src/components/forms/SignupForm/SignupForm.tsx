@@ -1,18 +1,27 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-
-import * as ROUTES from '../../../utils/routes';
+import React, { FormEvent, useState, useEffect } from 'react';
 
 import './SignupForm.css';
 
 import { OvalYellowButton } from '../../buttons/OvalYellowButton/OvalYellowButton';
 import { BasicInput } from '../../inputs/BasicInput/BasicInput';
 
-// type Props = {
-// 	// TO_DO: what is the correct type for it?
-// 	firebase: any;
-// };
+// Router imports
+import { withRouter } from 'react-router-dom';
+import * as ROUTES from '../../../utils/routes';
 
-type User = {
+//Redux imports
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	subscribeToUserAuthStateChanges,
+	signup,
+	isUserLoggedIn,
+} from '../../../store/auth';
+
+type Props = {
+	history: any;
+};
+
+type FormUserDetails = {
 	username: string;
 	email: string;
 	passwordOne: string;
@@ -20,8 +29,8 @@ type User = {
 	error: Error | null;
 };
 
-export function SignupForm(props: any) {
-	const [user, setUser] = useState<User>({
+function SignupForm(props: Props) {
+	const [formUserDetails, setFormUserDetails] = useState<FormUserDetails>({
 		username: '',
 		email: '',
 		passwordOne: '',
@@ -29,38 +38,45 @@ export function SignupForm(props: any) {
 		error: null,
 	});
 
+	const dispatch = useDispatch();
+	const userLoggedIn = useSelector(isUserLoggedIn);
+
+	// Run only on component load
+	useEffect(() => {
+		dispatch(subscribeToUserAuthStateChanges());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		if (userLoggedIn) {
+			// Redirect to Main Screen
+			props.history.push(ROUTES.MAIN_SCREEN);
+			return;
+		}
+	});
+
 	const onFormSubmit = (event: FormEvent<HTMLFormElement>): void => {
 		event.preventDefault();
-
-		const { username, email, passwordOne } = user;
-
-		props.firebase
-			.createUserWithEmailAndPassword(email, passwordOne)
-			.then((authUser: User) => {
-				setUser({ ...user, ...authUser });
-				props.history.push(ROUTES.MAIN_SCREEN);
-			})
-			.catch((error: Error) => {
-				setUser({ ...user, error });
-			});
+		const { email, passwordOne } = formUserDetails;
+		dispatch(signup(email, passwordOne));
 	};
 
-	const onInputChange = <Type extends {}>(newValue: Type, key: string) => {
-		setUser({ ...user, [key]: newValue });
+	const onInputChange = (newValue: string, key: string) => {
+		setFormUserDetails({ ...formUserDetails, [key]: newValue });
 	};
 
 	const isInvalid: boolean =
-		!user.username ||
-		!user.email ||
-		!user.passwordOne ||
-		!user.passwordTwo ||
-		user.passwordOne !== user.passwordTwo;
+		!formUserDetails.username ||
+		!formUserDetails.email ||
+		!formUserDetails.passwordOne ||
+		!formUserDetails.passwordTwo ||
+		formUserDetails.passwordOne !== formUserDetails.passwordTwo;
 
 	return (
 		<form className='signup-form' onSubmit={onFormSubmit}>
 			<BasicInput
 				name='username'
-				value={user.username}
+				value={formUserDetails.username}
 				onChange={onInputChange}
 				inputType='text'
 				placeholder='Full Name'
@@ -68,7 +84,7 @@ export function SignupForm(props: any) {
 			/>
 			<BasicInput
 				name='email'
-				value={user.email}
+				value={formUserDetails.email}
 				onChange={onInputChange}
 				inputType='text'
 				placeholder='Email Address'
@@ -76,7 +92,7 @@ export function SignupForm(props: any) {
 			/>
 			<BasicInput
 				name='passwordOne'
-				value={user.passwordOne}
+				value={formUserDetails.passwordOne}
 				onChange={onInputChange}
 				inputType='password'
 				placeholder='Password'
@@ -84,16 +100,20 @@ export function SignupForm(props: any) {
 			/>
 			<BasicInput
 				name='passwordTwo'
-				value={user.passwordTwo}
+				value={formUserDetails.passwordTwo}
 				onChange={onInputChange}
 				inputType='password'
 				placeholder='Confirm Password'
 				color='yellow'
 			/>
-			{user.error && <p className='signup-error'>{user.error.message}</p>}
+			{formUserDetails.error && (
+				<p className='signup-error'>{formUserDetails.error.message}</p>
+			)}
 			<div className='submit-btn'>
 				<OvalYellowButton text='Signup' type='submit' disabled={isInvalid} />
 			</div>
 		</form>
 	);
 }
+
+export default withRouter(SignupForm);

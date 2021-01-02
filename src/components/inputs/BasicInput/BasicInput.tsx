@@ -8,7 +8,7 @@ type Props = {
 	inputType: 'text' | 'email' | 'password';
 	placeholder: string;
 	color: 'yellow' | 'transparent';
-	onChange: <Type>(newValue: Type, key: string) => void;
+	onChange: (newValue: string, key: string) => void;
 };
 
 export function BasicInput({
@@ -23,7 +23,7 @@ export function BasicInput({
 		<input
 			name={name}
 			value={value}
-			onChange={(e) => onChange<string>(e.target.value, e.target.name)}
+			onChange={(e) => onChange(e.target.value, e.target.name)}
 			type={inputType}
 			placeholder={placeholder}
 			className={`basic-input ${color}`}

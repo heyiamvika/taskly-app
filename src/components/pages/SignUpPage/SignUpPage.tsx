@@ -1,12 +1,11 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 
 import * as ROUTES from '../../../utils/routes';
 
 import './SignUpPage.css';
 
 import { PlainTextYellowButton } from '../../buttons/PlainTextYellowButton/PlainTextYellowButton';
-import { SignupForm } from '../../forms/SignupForm/SignupForm';
+import SignupForm from '../../forms/SignupForm/SignupForm';
 
 export function SignUpPage() {
 	return (

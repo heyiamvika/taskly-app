@@ -8,12 +8,12 @@ import { WelcomePage } from './components/pages/WelcomePage/WelcomePage';
 import { SignUpPage } from './components/pages/SignUpPage/SignUpPage';
 import { LoginPage } from './components/pages/LoginPage/LoginPage';
 
-import StoreContext from './contexts/storeContext';
 import store from './store/store';
+import { Provider } from 'react-redux';
 
 function App() {
 	return (
-		<StoreContext.Provider value={store}>
+		<Provider store={store}>
 			<Router>
 				<div className='app'>
 					<Route exact path={ROUTES.WELCOME_SCREEN} component={WelcomePage} />
@@ -22,7 +22,7 @@ function App() {
 					<Route path={ROUTES.LOGIN} component={LoginPage} />
 				</div>
 			</Router>
-		</StoreContext.Provider>
+		</Provider>
 	);
 }
 
