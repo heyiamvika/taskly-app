@@ -1,37 +1,45 @@
 import React from 'react';
 
+import './Calendar.css';
+
 import { CalendarMonth } from '../CalendarMonth/CalendarMonth';
 import { CalendarNav } from '../CalendarNav/CalendarNav';
 
-import './Calendar.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeDate, getVisibleDate } from '../../store/calendar';
 
-type Props = {
-	currentDate: Date;
-	visibleDate: Date;
-	switchToPrevMonth: () => void;
-	switchToNextMonth: () => void;
-	onDayChoose: (value: Date | undefined) => void;
-};
+export function Calendar() {
+	const dispatch = useDispatch();
+	const visibleDate = useSelector(getVisibleDate);
 
-export function Calendar({
-	currentDate,
-	visibleDate,
-	switchToPrevMonth,
-	switchToNextMonth,
-	onDayChoose,
-}: Props) {
+	const switchToPrevMonth = () => {
+		dispatch(
+			changeDate(
+				new Date(visibleDate.getFullYear(), visibleDate.getMonth() - 1),
+			),
+		);
+	};
+
+	const switchToNextMonth = () => {
+		dispatch(
+			changeDate(
+				new Date(
+					visibleDate.getFullYear(),
+					visibleDate.getMonth() + 1,
+					visibleDate.getDate(),
+				),
+			),
+		);
+	};
+
 	return (
 		<div className='calendar'>
 			<CalendarNav
-				date={visibleDate}
+				visibleDate={visibleDate}
 				toPrevMonth={switchToPrevMonth}
 				toNextMonth={switchToNextMonth}
 			/>
-			<CalendarMonth
-				visibleDate={visibleDate}
-				currentDate={currentDate}
-				onDayChoose={onDayChoose}
-			/>
+			<CalendarMonth />
 		</div>
 	);
 }

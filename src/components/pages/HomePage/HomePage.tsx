@@ -7,6 +7,8 @@ import { DaySchedule } from '../../DaySchedule/DaySchedule';
 import { UserInfo } from '../../UserInfo/UserInfo';
 import { AddNewEvent } from '../../AddNewEvent/AddNewEvent';
 
+// TO_DO: delete props, get uuid from auth
+
 type Props = {
 	user: {
 		uid: string;
@@ -14,19 +16,18 @@ type Props = {
 };
 
 export function HomePage({ user }: Props) {
-	const [currentDate] = useState(new Date());
-	const [visibleDate, setVisibleDate] = useState(currentDate);
-	const [monthlySchedule, setMonthlySchedule] = useState<{
-		[key: number]: object;
-	} | null>(null);
-	const [addNewEventVisible, setAddNewEventVisible] = useState(false);
+	// const [currentDate] = useState(new Date());
+	// const [visibleDate, setVisibleDate] = useState(currentDate);
+	// const [monthlySchedule, setMonthlySchedule] = useState<{
+	// 	[key: number]: object;
+	// } | null>(null);
+	// const [addNewEventVisible, setAddNewEventVisible] = useState(false);
 
 	// const switchToPrevMonth = () => {
 	// 	setVisibleDate(
 	// 		new Date(
 	// 			visibleDate.getFullYear(),
 	// 			visibleDate.getMonth() - 1,
-	// 			visibleDate.getDate(),
 	// 		),
 	// 	);
 	// };
@@ -122,13 +123,7 @@ export function HomePage({ user }: Props) {
 	return (
 		<div className='home-page'>
 			<div className='home-page-grey-section'>
-				{/* <Calendar
-					currentDate={currentDate}
-					visibleDate={visibleDate}
-					switchToNextMonth={switchToNextMonth}
-					switchToPrevMonth={switchToPrevMonth}
-					onDayChoose={chooseDay}
-				/> */}
+				<Calendar />
 			</div>
 			<div className='home-page-white-section'>
 				{/* <DaySchedule

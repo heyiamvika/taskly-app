@@ -1,19 +1,25 @@
 import React from 'react';
+
 import './CalendarDay.css';
+
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	changeDate,
+	getCurrentDate,
+	getVisibleDate,
+} from '../../store/calendar';
 
 type Props = {
 	value: Date | undefined;
-	currentDate: Date;
-	visibleDate: Date;
-	onDayChoose: (value: Date | undefined) => void;
 };
 
-export function CalendarDay({
-	value,
-	currentDate,
-	visibleDate,
-	onDayChoose,
-}: Props) {
+export function CalendarDay({ value }: Props) {
+	const dispatch = useDispatch();
+	const currentDate = useSelector(getCurrentDate);
+	const visibleDate = useSelector(getVisibleDate);
+
+	const onDayChoose = (value: Date) => dispatch(changeDate(value));
+
 	const getDayClass = () => {
 		const todayClass =
 			value && value.toDateString() === currentDate.toDateString()
@@ -29,7 +35,7 @@ export function CalendarDay({
 	};
 
 	return (
-		<td className={getDayClass()} onClick={() => onDayChoose(value)}>
+		<td className={getDayClass()} onClick={() => value && onDayChoose(value)}>
 			{value ? value.getDate() : ''}
 		</td>
 	);

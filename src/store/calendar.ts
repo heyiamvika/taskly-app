@@ -21,6 +21,8 @@ import {
 import { RootState } from './store-types/root';
 
 const initialState: CalendarState = {
+	currentDate: new Date(),
+	visibleDate: new Date(),
 	events: {},
 	loading: false,
 	isSubscribed: false,
@@ -46,6 +48,10 @@ const calendarSlice = createSlice({
 		subscribedToEvents: (state: CalendarState) => {
 			state.isSubscribed = true;
 		},
+		changeVisibleDate: (state: CalendarState, action: PayloadAction<Date>) => {
+			const newDate: Date = action.payload;
+			state.visibleDate = newDate;
+		},
 	},
 });
 
@@ -54,6 +60,7 @@ const {
 	eventsChangesRequestFailed,
 	eventsUpdated,
 	subscribedToEvents,
+	changeVisibleDate,
 } = calendarSlice.actions;
 export default calendarSlice.reducer;
 
@@ -80,6 +87,8 @@ export const subscribeToUserEvents = (uid: string) => (
 
 	dispatch(subscribedToEvents());
 };
+
+export const changeDate = (newDate: Date) => changeVisibleDate(newDate);
 
 export const addNewEvent = (
 	uid: string,
@@ -177,28 +186,100 @@ export const unpinEvent = (
 // };
 
 // Selectors
-export const getDaysWithEvents = (year: string, month: string) =>
-	createSelector(
-		(state: RootState) => state.calendar.events,
-		(events: UserEvents) => {
-			const result = [];
+export const getCurrentDate = createSelector(
+	(state: RootState) => state.calendar.currentDate,
+	(currentDate: Date) => currentDate,
+);
 
-			if (!isObjectEmpty(events)) {
-				const monthlyEvents = events[year][month];
-				for (const day in monthlyEvents) {
-					if (!isObjectEmpty(monthlyEvents[day])) result.push(day);
-				}
+export const getVisibleDate = createSelector(
+	(state: RootState) => state.calendar.visibleDate,
+	(visibleDate: Date) => visibleDate,
+);
+
+export const getVisibleMonthBlankDaysCount = createSelector(
+	(state: RootState) => state.calendar.visibleDate,
+	(visibleDate: Date) =>
+		new Date(visibleDate.getFullYear(), visibleDate.getMonth(), 0).getDay(),
+);
+
+export const getDaysInVisibleMonthCount = createSelector(
+	(state: RootState) => state.calendar.visibleDate,
+	(visibleDate: Date) =>
+		new Date(
+			visibleDate.getFullYear(),
+			visibleDate.getMonth() + 1,
+			0,
+		).getDate(),
+);
+
+export const getDaysValuesInVisibleMonth = createSelector(
+	(state: RootState) => getVisibleMonthBlankDaysCount(state),
+	(state: RootState) => getDaysInVisibleMonthCount(state),
+	(state: RootState) => getVisibleDate(state),
+	(
+		blankDaysCount: number,
+		totalDaysCount: number,
+		visibleDate: Date,
+	): (Date | undefined)[] => {
+		const days = [];
+		for (let i = 0; i < blankDaysCount; i++) days.push(undefined);
+		for (let i = 0; i < totalDaysCount; i++)
+			days.push(
+				new Date(visibleDate.getFullYear(), visibleDate.getMonth(), i + 1),
+			);
+
+		return days;
+	},
+);
+
+export const getWeeksCountInVisibleMonth = createSelector(
+	(state: RootState) => getVisibleMonthBlankDaysCount(state),
+	(state: RootState) => getDaysInVisibleMonthCount(state),
+	(blankDaysCount: number, totalDaysCount: number): number => {
+		// TO_DO: move to constants and import
+		const DAYS_IN_WEEK = 7;
+
+		const weeksCount = Math.floor(
+			(blankDaysCount + totalDaysCount) / DAYS_IN_WEEK,
+		);
+		const lastWeek = Number(
+			(blankDaysCount + totalDaysCount) % DAYS_IN_WEEK > 0,
+		);
+
+		return weeksCount + lastWeek;
+	},
+);
+
+export const getDaysWithEvents = createSelector(
+	(state: RootState) => state.calendar.events,
+	(state: RootState) => state.calendar.visibleDate,
+	(events: UserEvents, visibleDate: Date): boolean[] => {
+		const year = visibleDate.getFullYear();
+		const month = visibleDate.getMonth();
+		const result: boolean[] = [];
+
+		if (!isObjectEmpty(events)) {
+			const monthlyEvents = events[year][month];
+			for (const day in monthlyEvents) {
+				result.push(!isObjectEmpty(monthlyEvents[day]));
 			}
+		}
 
-			return result;
-		},
-	);
+		return result;
+	},
+);
 
-export const getYearEvents = (year: string) =>
-	createSelector(
-		(state: RootState) => state.calendar.events,
-		(events: UserEvents) => (events.hasOwnProperty(year) ? events[year] : []),
-	);
+// export const hasVisibleDayEvents = (dayIndex: number) =>
+// 	createSelector(
+// 		(state: RootState) => state.calendar.events,
+// 		(events: UserEvents) => {},
+// 	);
+
+// export const getYearEvents = (year: string) =>
+// 	createSelector(
+// 		(state: RootState) => state.calendar.events,
+// 		(events: UserEvents) => (events.hasOwnProperty(year) ? events[year] : []),
+// 	);
 
 // export const getMonthEvents = (year: string, month: string) =>
 // 	createSelector(getYearEvents(year), (yearEvents: UserEvents) =>

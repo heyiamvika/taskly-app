@@ -16,6 +16,8 @@ export type UserEvents = {
 };
 
 export type CalendarState = {
+	currentDate: Date;
+	visibleDate: Date;
 	events: UserEvents;
 	loading: boolean;
 	isSubscribed: boolean;

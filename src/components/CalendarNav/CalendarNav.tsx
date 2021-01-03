@@ -9,14 +9,14 @@ import { RoundArrowButton } from '../buttons/RoundArrowButton/RoundArrowButton';
 type Props = {
 	toPrevMonth: () => void;
 	toNextMonth: () => void;
-	date: Date;
+	visibleDate: Date;
 };
 
-export function CalendarNav({ date, toPrevMonth, toNextMonth }: Props) {
+export function CalendarNav({ visibleDate, toPrevMonth, toNextMonth }: Props) {
 	return (
 		<div className='calendar-nav'>
 			<span className='month-title'>
-				{LONG_MONTHS[date.getMonth()]}, {date.getFullYear()}
+				{LONG_MONTHS[visibleDate.getMonth()]}, {visibleDate.getFullYear()}
 			</span>
 			<RoundArrowButton
 				size={ButtonSize.Small}
