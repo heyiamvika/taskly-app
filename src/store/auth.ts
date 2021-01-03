@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 
 import * as firebaseActions from './firebase/firebaseActions';
 
-import { AuthState } from './store-types/auth';
+import { AuthState, User } from './store-types/auth';
 import { RootState } from './store-types/root';
 
 const initialState: AuthState = {
@@ -84,4 +84,9 @@ export const getUserId = createSelector(
 export const getAuthError = createSelector(
 	(state: RootState) => state.auth.error,
 	(error) => error,
+);
+
+export const getCurrentUser = createSelector(
+	(state: RootState) => state.auth.user,
+	(user: User | null) => user,
 );

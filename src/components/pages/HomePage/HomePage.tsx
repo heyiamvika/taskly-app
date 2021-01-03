@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import './HomePage.css';
 
@@ -7,127 +7,30 @@ import { DaySchedule } from '../../DaySchedule/DaySchedule';
 import { UserInfo } from '../../UserInfo/UserInfo';
 import { AddNewEvent } from '../../AddNewEvent/AddNewEvent';
 
-// TO_DO: delete props, get uuid from auth
+import { useSelector } from 'react-redux';
+import { isUserLoggedIn } from '../../../store/auth';
 
-type Props = {
-	user: {
-		uid: string;
-	};
-};
+import { Redirect } from 'react-router-dom';
+import * as ROUTES from '../../../utils/routes';
 
-export function HomePage({ user }: Props) {
-	// const [currentDate] = useState(new Date());
-	// const [visibleDate, setVisibleDate] = useState(currentDate);
-	// const [monthlySchedule, setMonthlySchedule] = useState<{
-	// 	[key: number]: object;
-	// } | null>(null);
+export function HomePage() {
 	const [addNewEventVisible, setAddNewEventVisible] = useState(false);
 
-	// const switchToPrevMonth = () => {
-	// 	setVisibleDate(
-	// 		new Date(
-	// 			visibleDate.getFullYear(),
-	// 			visibleDate.getMonth() - 1,
-	// 		),
-	// 	);
-	// };
+	const userLoggedIn = useSelector(isUserLoggedIn);
 
-	// const switchToNextMonth = () => {
-	// 	setVisibleDate(
-	// 		new Date(
-	// 			visibleDate.getFullYear(),
-	// 			visibleDate.getMonth() + 1,
-	// 			visibleDate.getDate(),
-	// 		),
-	// 	);
-	// };
-
-	// const switchToPrevDay = () => {
-	// 	setVisibleDate(
-	// 		new Date(
-	// 			visibleDate.getFullYear(),
-	// 			visibleDate.getMonth(),
-	// 			visibleDate.getDate() - 1,
-	// 		),
-	// 	);
-	// };
-
-	// const switchToNextDay = () => {
-	// 	setVisibleDate(
-	// 		new Date(
-	// 			visibleDate.getFullYear(),
-	// 			visibleDate.getMonth(),
-	// 			visibleDate.getDate() + 1,
-	// 		),
-	// 	);
-	// };
-
-	// const chooseDay = (value: Date | undefined) => {
-	// 	if (!value) return;
-	// 	setVisibleDate(value);
-	// };
-
-	// const getVisibleDayEvents = () => {
-	// 	return monthlySchedule ? monthlySchedule[visibleDate.getDate()] : null;
-	// };
+	console.log('userLoggedIn', userLoggedIn);
 
 	const openAddNewEventSection = () => setAddNewEventVisible(true);
 	const closeAddNewEventSection = () => setAddNewEventVisible(false);
 
-	// const createNewEvent = (newEvent: Event) => {
-	// 	firebase.createNewTask(
-	// 		user.uid,
-	// 		visibleDate.getFullYear(),
-	// 		visibleDate.getMonth(),
-	// 		visibleDate.getDate(),
-	// 		newEvent,
-	// 	);
-
-	// 	closeAddNewEventSection();
-	// 	fetchNewSchedule();
-	// };
-
-	// const fetchNewSchedule = async () => {
-	// 	const newSchedule = await firebase.getMonthlySchedule(
-	// 		user.uid,
-	// 		visibleDate.getFullYear(),
-	// 		visibleDate.getMonth(),
-	// 	);
-
-	// 	setMonthlySchedule(newSchedule);
-	// };
-
-	// useEffect(() => {
-	// 	if (!user) return;
-
-	// 	// fetch user's schedule for this month
-	// 	fetchNewSchedule();
-
-	// 	// subscribe to user's schedule;
-	// 	// const onDataChanged = (data: any) => {
-	// 	// 	console.log('data changed', data);
-
-	// 	// 	setMonthlySchedule(data);
-	// 	// };
-
-	// 	// firebase.subscribeToMonthlySchedule(
-	// 	// 	user.uid,
-	// 	// 	visibleDate.getFullYear(),
-	// 	// 	visibleDate.getMonth(),
-	// 	// 	onDataChanged,
-	// 	// );
-
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [user]);
-
-	return (
+	const renderHomePage = () => (
 		<div className='home-page'>
 			<div className='home-page-grey-section'>
 				<Calendar />
 			</div>
 			<div className='home-page-white-section'>
 				<DaySchedule onAddNewEventBtnClick={openAddNewEventSection} />
-				{/* <UserInfo /> */}
+				<UserInfo />
 				<AddNewEvent
 					isVisible={addNewEventVisible}
 					onCloseBtnClick={closeAddNewEventSection}
@@ -135,4 +38,8 @@ export function HomePage({ user }: Props) {
 			</div>
 		</div>
 	);
+
+	const redirectToWelcomePage = () => <Redirect to={ROUTES.WELCOME_SCREEN} />;
+
+	return userLoggedIn ? renderHomePage() : redirectToWelcomePage();
 }

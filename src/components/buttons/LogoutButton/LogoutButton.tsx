@@ -1,12 +1,25 @@
 import React from 'react';
 
+import { withRouter } from 'react-router-dom';
+
 import './LogoutButton.css';
 
 import * as ROUTES from '../../../utils/routes';
 
-export function LogoutButton(props: any) {
+import { useDispatch } from 'react-redux';
+import { logout } from '../../../store/auth';
+
+type Props = {
+	// TO_DO: change to type
+	history: any;
+};
+
+function LogoutButton(props: Props) {
+	const dispatch = useDispatch();
+	const logoutUser = () => dispatch(logout());
+
 	const onLogoutBtnClick = () => {
-		props.firebase.signOut();
+		logoutUser();
 		props.history.push(ROUTES.WELCOME_SCREEN);
 	};
 
@@ -17,4 +30,4 @@ export function LogoutButton(props: any) {
 	);
 }
 
-export default LogoutButton;
+export default withRouter(LogoutButton);

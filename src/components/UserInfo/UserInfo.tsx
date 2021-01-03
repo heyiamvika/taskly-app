@@ -1,16 +1,17 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 
 import './UserInfo.css';
 
 import defaultUser from '../../assets/default-user.svg';
-import { LogoutButton } from '../buttons/LogoutButton/LogoutButton';
+import LogoutButton from '../buttons/LogoutButton/LogoutButton';
 
-type Props = {
-	user: null | {};
-};
+import { useSelector, useDispatch } from 'react-redux';
+import { getCurrentUser } from '../../store/auth';
 
-export function UserInfo({ user }: Props) {
+export function UserInfo() {
+	const dispatch = useDispatch();
+	const user = useSelector(getCurrentUser);
+
 	return (
 		<div className='user-info'>
 			<div className='name-actions-wrapper'>
@@ -18,7 +19,7 @@ export function UserInfo({ user }: Props) {
 				<LogoutButton />
 			</div>
 			<div className='profile-pic'>
-				<img src={defaultUser}></img>
+				<img src={defaultUser} alt='default user'></img>
 			</div>
 		</div>
 	);

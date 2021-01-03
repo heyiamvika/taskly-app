@@ -9,16 +9,22 @@ import { SignUpPage } from './components/pages/SignUpPage/SignUpPage';
 import { LoginPage } from './components/pages/LoginPage/LoginPage';
 
 //Redux imports
-import { useDispatch } from 'react-redux';
-import { subscribeToUserAuthStateChanges } from './store/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { subscribeToUserAuthStateChanges, getUserId } from './store/auth';
+import { subscribeToUserEvents } from './store/calendar';
 
 function App() {
 	const dispatch = useDispatch();
+	const userId = useSelector(getUserId);
 
 	// Subscribe to auth changes on app load
 	useEffect(() => {
 		dispatch(subscribeToUserAuthStateChanges());
-	}, [dispatch]);
+
+		if (userId) {
+			dispatch(subscribeToUserEvents(userId));
+		}
+	}, [dispatch, userId]);
 
 	return (
 		<Router>
