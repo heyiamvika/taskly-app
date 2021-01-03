@@ -6,7 +6,7 @@ import './EmojiPicker.css';
 
 type Props = {
 	emoji: string | undefined;
-	onEmojiChange: <Type>(newValue: Type, key: string) => void;
+	onEmojiChange: (newValue: string | boolean | undefined, key: string) => void;
 };
 
 export function EmojiPicker({ emoji, onEmojiChange }: Props) {
@@ -15,7 +15,7 @@ export function EmojiPicker({ emoji, onEmojiChange }: Props) {
 
 	picker.on('emoji', (selection) => {
 		// handle the selected emoji here
-		onEmojiChange<string | undefined>(selection.emoji, 'emoji');
+		onEmojiChange(selection.emoji, 'emoji');
 	});
 
 	trigger?.addEventListener('click', () =>

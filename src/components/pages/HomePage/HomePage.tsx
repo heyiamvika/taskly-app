@@ -21,7 +21,7 @@ export function HomePage({ user }: Props) {
 	// const [monthlySchedule, setMonthlySchedule] = useState<{
 	// 	[key: number]: object;
 	// } | null>(null);
-	// const [addNewEventVisible, setAddNewEventVisible] = useState(false);
+	const [addNewEventVisible, setAddNewEventVisible] = useState(false);
 
 	// const switchToPrevMonth = () => {
 	// 	setVisibleDate(
@@ -71,8 +71,8 @@ export function HomePage({ user }: Props) {
 	// 	return monthlySchedule ? monthlySchedule[visibleDate.getDate()] : null;
 	// };
 
-	// const openAddNewEventSection = () => setAddNewEventVisible(true);
-	// const closeAddNewEventSection = () => setAddNewEventVisible(false);
+	const openAddNewEventSection = () => setAddNewEventVisible(true);
+	const closeAddNewEventSection = () => setAddNewEventVisible(false);
 
 	// const createNewEvent = (newEvent: Event) => {
 	// 	firebase.createNewTask(
@@ -126,20 +126,12 @@ export function HomePage({ user }: Props) {
 				<Calendar />
 			</div>
 			<div className='home-page-white-section'>
-				{/* <DaySchedule
-					visibleDay={visibleDate}
-					dayEvents={getVisibleDayEvents()}
-					switchToPrevDay={switchToPrevDay}
-					switchToNextDay={switchToNextDay}
-					onAddNewEventBtnClick={openAddNewEventSection}
-				/>
-				<UserInfo />
+				<DaySchedule onAddNewEventBtnClick={openAddNewEventSection} />
+				{/* <UserInfo /> */}
 				<AddNewEvent
 					isVisible={addNewEventVisible}
-					eventDate={visibleDate}
 					onCloseBtnClick={closeAddNewEventSection}
-					onCreateNewEvent={createNewEvent}
-				/> */}
+				/>
 			</div>
 		</div>
 	);

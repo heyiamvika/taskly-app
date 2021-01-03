@@ -6,7 +6,7 @@ type Props = {
 	emoji: string;
 	title: string;
 	keyOnSelectChange: string;
-	onChange: <Type>(newValue: Type, key: string) => void;
+	onChange: (newValue: string | undefined, key: string) => void;
 };
 
 export function NoteInput({

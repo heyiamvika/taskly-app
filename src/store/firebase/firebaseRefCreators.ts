@@ -1,8 +1,8 @@
 type RefOptions = {
 	uid?: string;
-	year?: string;
-	month?: string;
-	day?: string;
+	year?: number;
+	month?: number;
+	day?: number;
 	eventKey?: string;
 };
 

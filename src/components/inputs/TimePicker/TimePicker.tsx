@@ -13,7 +13,7 @@ type Props = {
 	emoji: string;
 	eventDate: Date;
 	keyOnSelectChange: string;
-	onSelectChange: <Type>(newValue: Type, key: string) => void;
+	onSelectChange: (newValue: string | boolean | undefined, key: string) => void;
 };
 
 type State = {

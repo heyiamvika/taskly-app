@@ -17,6 +17,7 @@ import {
 	CalendarState,
 	UserEvents,
 	Event,
+	YearEvents,
 	MonthEvents,
 	DayEvents,
 } from './store-types/calendar';
@@ -94,14 +95,13 @@ export const changeDate = (newDate: Date) => changeVisibleDate(newDate);
 
 export const addNewEvent = (
 	uid: string,
-	year: string,
-	month: string,
-	day: string,
+	year: number,
+	month: number,
+	day: number,
 	event: Event,
 ) => {
 	const ref = createEventsRef({ uid, year, month, day });
 	const eventToAdd = { ...event, isPinned: false };
-
 	return firebaseActions.addItemCallBegun({
 		ref,
 		item: eventToAdd,
@@ -110,9 +110,9 @@ export const addNewEvent = (
 
 export const updateEvent = (
 	uid: string,
-	year: string,
-	month: string,
-	day: string,
+	year: number,
+	month: number,
+	day: number,
 	eventKey: string,
 	updatedEvent: Event,
 ) => {
@@ -126,9 +126,9 @@ export const updateEvent = (
 
 export const removeEvent = (
 	uid: string,
-	year: string,
-	month: string,
-	day: string,
+	year: number,
+	month: number,
+	day: number,
 	eventKey: string,
 ) => {
 	const ref = createEventsRef({ uid, year, month, day, eventKey });
@@ -140,9 +140,9 @@ export const removeEvent = (
 
 export const pinEvent = (
 	uid: string,
-	year: string,
-	month: string,
-	day: string,
+	year: number,
+	month: number,
+	day: number,
 	eventKey: string,
 	event: Event,
 ) => {
@@ -154,9 +154,9 @@ export const pinEvent = (
 
 export const unpinEvent = (
 	uid: string,
-	year: string,
-	month: string,
-	day: string,
+	year: number,
+	month: number,
+	day: number,
 	eventKey: string,
 	event: Event,
 ) => {
@@ -300,28 +300,26 @@ export const getWeekEventsBooleans = (weekIndex: number) =>
 		(daysWithEvents) => daysWithEvents[weekIndex],
 	);
 
-// export const hasVisibleDayEvents = (dayIndex: number) =>
-// 	createSelector(
-// 		(state: RootState) => state.calendar.events,
-// 		(events: UserEvents) => {},
-// 	);
+export const getVisibleYearEvents = createSelector(
+	(state: RootState) => state.calendar.events,
+	(state: RootState) => String(state.calendar.visibleDate.getFullYear()),
+	(userEvents: UserEvents, year: string): YearEvents | null =>
+		userEvents ? userEvents[year] : null,
+);
 
-// export const getYearEvents = (year: string) =>
-// 	createSelector(
-// 		(state: RootState) => state.calendar.events,
-// 		(events: UserEvents) => (events.hasOwnProperty(year) ? events[year] : []),
-// 	);
+export const getVisibleMonthEvents = createSelector(
+	(state: RootState) => getVisibleYearEvents(state),
+	(state: RootState) => String(state.calendar.visibleDate.getMonth()),
+	(yearEvents: YearEvents | null, month: string): MonthEvents | null =>
+		yearEvents ? yearEvents[month] : null,
+);
 
-// export const getMonthEvents = (year: string, month: string) =>
-// 	createSelector(getYearEvents(year), (yearEvents: UserEvents) =>
-// 		yearEvents.hasOwnProperty(month) ? yearEvents[month] : [],
-// 	);
-
-// export const getDayEvents = (year: string, month: string, day: string) =>
-// 	createSelector(
-// 		getMonthEvents(year, month),
-// 		(monthEvents: MonthEvents) => monthEvents[day] || [],
-// 	);
+export const getVisibleDayEvents = createSelector(
+	(state: RootState) => getVisibleMonthEvents(state),
+	(state: RootState) => String(state.calendar.visibleDate.getDate()),
+	(monthEvents: MonthEvents | null, date: string): DayEvents | null =>
+		monthEvents ? monthEvents[date] : null,
+);
 
 // export const getEventByKey = (
 // 	year: string,
