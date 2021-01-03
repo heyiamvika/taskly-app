@@ -11,9 +11,10 @@ import {
 
 type Props = {
 	value: Date | undefined;
+	hasEvents: boolean;
 };
 
-export function CalendarDay({ value }: Props) {
+export function CalendarDay({ value, hasEvents }: Props) {
 	const dispatch = useDispatch();
 	const currentDate = useSelector(getCurrentDate);
 	const visibleDate = useSelector(getVisibleDate);
@@ -31,12 +32,25 @@ export function CalendarDay({ value }: Props) {
 				? 'chosen-day'
 				: '';
 
-		return `calendar-day ${todayClass} ${chosenDayClass}`;
+		const hasEventsClass = hasEvents ? 'has-events-day' : 'no-events-day';
+
+		return `calendar-day ${todayClass} ${chosenDayClass} ${hasEventsClass}`;
+	};
+
+	const getPointClass = () => {
+		const hasEventsClass = hasEvents ? 'has-events-point' : 'no-events-point';
+		const todayClass =
+			value && value.toDateString() === currentDate.toDateString() && hasEvents
+				? 'has-events-today-point'
+				: '';
+
+		return `events-point ${hasEventsClass} ${todayClass}`;
 	};
 
 	return (
-		<td className={getDayClass()} onClick={() => value && onDayChoose(value)}>
-			{value ? value.getDate() : ''}
-		</td>
+		<div className={getDayClass()} onClick={() => value && onDayChoose(value)}>
+			<td>{value ? value.getDate() : ''}</td>
+			<span className={getPointClass()}></span>
+		</div>
 	);
 }

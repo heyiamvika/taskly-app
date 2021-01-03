@@ -2,16 +2,51 @@
 	width: 40px;
 	height: 40px;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	justify-content: flex-start;
 	align-items: center;
+	padding-top: 10px;
+	border-radius: 50%;
+	border: 2px solid transparent;
+
+	/* font-style: italic; */
+	line-height: 1;
+	text-align: center;
+	/* font-family: 'ABeeZee', 'Helvetica'; */
+	font-size: 14px;
 }
 
 .today {
 	background-color: #f8d57e;
-	border-radius: 50%;
 }
 
 .chosen-day {
-	border: 2px solid #f8d57e;
+	border-color: #f8d57e;
+}
+
+.has-events-day {
+	color: #2c2543;
+}
+
+.no-events-day {
+	color: #667180;
+}
+
+.events-point {
+	margin-top: 4px;
+	width: 4px;
+	height: 4px;
 	border-radius: 50%;
+}
+
+.has-events-point {
+	background-color: #f8d57e;
+}
+
+.no-events-point {
+	background-color: transparent;
+}
+
+.has-events-today-point {
+	background-color: #ffffff;
 }

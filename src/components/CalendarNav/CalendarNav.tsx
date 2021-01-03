@@ -1,18 +1,39 @@
 import React from 'react';
 
+import { LONG_MONTHS } from '../../utils/constants';
+
 import './CalendarNav.css';
 
 import { ButtonSize, ButtonDirection } from '../../utils/buttonOptions';
-import { LONG_MONTHS } from '../../utils/constants';
 import { RoundArrowButton } from '../buttons/RoundArrowButton/RoundArrowButton';
 
-type Props = {
-	toPrevMonth: () => void;
-	toNextMonth: () => void;
-	visibleDate: Date;
-};
+import { useDispatch, useSelector } from 'react-redux';
+import { changeDate, getVisibleDate } from '../../store/calendar';
 
-export function CalendarNav({ visibleDate, toPrevMonth, toNextMonth }: Props) {
+export function CalendarNav() {
+	const dispatch = useDispatch();
+	const visibleDate = useSelector(getVisibleDate);
+
+	const switchToPrevMonth = () => {
+		dispatch(
+			changeDate(
+				new Date(visibleDate.getFullYear(), visibleDate.getMonth() - 1),
+			),
+		);
+	};
+
+	const switchToNextMonth = () => {
+		dispatch(
+			changeDate(
+				new Date(
+					visibleDate.getFullYear(),
+					visibleDate.getMonth() + 1,
+					visibleDate.getDate(),
+				),
+			),
+		);
+	};
+
 	return (
 		<div className='calendar-nav'>
 			<span className='month-title'>
@@ -21,12 +42,12 @@ export function CalendarNav({ visibleDate, toPrevMonth, toNextMonth }: Props) {
 			<RoundArrowButton
 				size={ButtonSize.Small}
 				direction={ButtonDirection.Left}
-				onButtonClick={toPrevMonth}
+				onButtonClick={switchToPrevMonth}
 			/>
 			<RoundArrowButton
 				size={ButtonSize.Small}
 				direction={ButtonDirection.Right}
-				onButtonClick={toNextMonth}
+				onButtonClick={switchToNextMonth}
 			/>
 		</div>
 	);

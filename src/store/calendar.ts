@@ -3,6 +3,8 @@ import { createSelector } from 'reselect';
 
 import { isObjectEmpty } from '../utils/helperFunctions';
 
+import { DAYS_IN_WEEK } from '../utils/constants';
+
 import * as firebaseActions from './firebase/firebaseActions';
 import {
 	createEventsRef,
@@ -196,13 +198,13 @@ export const getVisibleDate = createSelector(
 	(visibleDate: Date) => visibleDate,
 );
 
-export const getVisibleMonthBlankDaysCount = createSelector(
+const getVisibleMonthBlankDaysCount = createSelector(
 	(state: RootState) => state.calendar.visibleDate,
 	(visibleDate: Date) =>
 		new Date(visibleDate.getFullYear(), visibleDate.getMonth(), 0).getDay(),
 );
 
-export const getDaysInVisibleMonthCount = createSelector(
+const getDaysInVisibleMonthCount = createSelector(
 	(state: RootState) => state.calendar.visibleDate,
 	(visibleDate: Date) =>
 		new Date(
@@ -212,33 +214,10 @@ export const getDaysInVisibleMonthCount = createSelector(
 		).getDate(),
 );
 
-export const getDaysValuesInVisibleMonth = createSelector(
-	(state: RootState) => getVisibleMonthBlankDaysCount(state),
-	(state: RootState) => getDaysInVisibleMonthCount(state),
-	(state: RootState) => getVisibleDate(state),
-	(
-		blankDaysCount: number,
-		totalDaysCount: number,
-		visibleDate: Date,
-	): (Date | undefined)[] => {
-		const days = [];
-		for (let i = 0; i < blankDaysCount; i++) days.push(undefined);
-		for (let i = 0; i < totalDaysCount; i++)
-			days.push(
-				new Date(visibleDate.getFullYear(), visibleDate.getMonth(), i + 1),
-			);
-
-		return days;
-	},
-);
-
 export const getWeeksCountInVisibleMonth = createSelector(
 	(state: RootState) => getVisibleMonthBlankDaysCount(state),
 	(state: RootState) => getDaysInVisibleMonthCount(state),
 	(blankDaysCount: number, totalDaysCount: number): number => {
-		// TO_DO: move to constants and import
-		const DAYS_IN_WEEK = 7;
-
 		const weeksCount = Math.floor(
 			(blankDaysCount + totalDaysCount) / DAYS_IN_WEEK,
 		);
@@ -250,13 +229,52 @@ export const getWeeksCountInVisibleMonth = createSelector(
 	},
 );
 
+export const getDaysValuesInVisibleMonth = createSelector(
+	(state: RootState) => getVisibleMonthBlankDaysCount(state),
+	(state: RootState) => getDaysInVisibleMonthCount(state),
+	(state: RootState) => getVisibleDate(state),
+	(state: RootState) => getWeeksCountInVisibleMonth(state),
+	(
+		blankDaysCount: number,
+		totalDaysCount: number,
+		visibleDate: Date,
+		weeksCount: number,
+	) => {
+		const days: (Date | undefined)[] = [];
+		const daysInWeeks: (Date | undefined)[][] = [];
+
+		for (let i = 0; i < blankDaysCount; i++) days.push(undefined);
+		for (let i = 0; i < totalDaysCount; i++)
+			days.push(
+				new Date(visibleDate.getFullYear(), visibleDate.getMonth(), i + 1),
+			);
+
+		for (let i = 0; i < weeksCount; i++) {
+			daysInWeeks[i] = days.slice(
+				i * DAYS_IN_WEEK,
+				i * DAYS_IN_WEEK + DAYS_IN_WEEK,
+			);
+		}
+
+		return daysInWeeks;
+	},
+);
+
+export const getWeekValues = (weekIndex: number) =>
+	createSelector(
+		(state: RootState) => getDaysValuesInVisibleMonth(state),
+		(monthValues) => monthValues[weekIndex],
+	);
+
 export const getDaysWithEvents = createSelector(
 	(state: RootState) => state.calendar.events,
 	(state: RootState) => state.calendar.visibleDate,
-	(events: UserEvents, visibleDate: Date): boolean[] => {
+	(state: RootState) => getWeeksCountInVisibleMonth(state),
+	(events: UserEvents, visibleDate: Date, weeksCount: number): boolean[][] => {
 		const year = visibleDate.getFullYear();
 		const month = visibleDate.getMonth();
 		const result: boolean[] = [];
+		const resultInWeeks: boolean[][] = [];
 
 		if (!isObjectEmpty(events)) {
 			const monthlyEvents = events[year][month];
@@ -265,9 +283,22 @@ export const getDaysWithEvents = createSelector(
 			}
 		}
 
-		return result;
+		for (let i = 0; i < weeksCount; i++) {
+			resultInWeeks[i] = result.slice(
+				i * DAYS_IN_WEEK,
+				i * DAYS_IN_WEEK + DAYS_IN_WEEK,
+			);
+		}
+
+		return resultInWeeks;
 	},
 );
+
+export const getWeekEventsBooleans = (weekIndex: number) =>
+	createSelector(
+		(state: RootState) => getDaysWithEvents(state),
+		(daysWithEvents) => daysWithEvents[weekIndex],
+	);
 
 // export const hasVisibleDayEvents = (dayIndex: number) =>
 // 	createSelector(
