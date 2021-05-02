@@ -7,8 +7,6 @@ import * as serviceWorker from "./serviceWorker";
 
 // import Firebase, { FirebaseContext } from './components/Firebase/index';
 
-// import { db } from "./firebase/firebaseConfig";
-
 ReactDOM.render(
   <React.StrictMode>
     {/* <FirebaseContext.Provider value={new Firebase()}> */}

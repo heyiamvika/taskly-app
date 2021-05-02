@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import useSingleUserCalendar from "../../../hooks/useSingleUserCalendar";
+import _ from "lodash";
 
 import "./HomePage.css";
 
@@ -28,6 +30,10 @@ export function HomePage({ firebase, user }: Props) {
   //     [key: number]: object;
   //   } | null>(null);
   const [addNewEventVisible, setAddNewEventVisible] = useState(false);
+
+  const events = useSingleUserCalendar();
+
+  console.log("events", events);
 
   const switchToPrevMonth = () => {
     setVisibleDate(
@@ -74,9 +80,9 @@ export function HomePage({ firebase, user }: Props) {
     setVisibleDate(value);
   };
 
-  //   const getVisibleDayEvents = () => {
-  //     return monthlySchedule ? monthlySchedule[visibleDate.getDate()] : null;
-  //   };
+  const getVisibleDayEvents = () => {
+    return _.isEmpty(events) ? null : events[visibleDate.getDate()];
+  };
 
   const openAddNewEventSection = () => setAddNewEventVisible(true);
   const closeAddNewEventSection = () => setAddNewEventVisible(false);
@@ -139,13 +145,13 @@ export function HomePage({ firebase, user }: Props) {
         />
       </div>
       <div className="home-page-white-section">
-        {/* <DaySchedule
+        <DaySchedule
           visibleDay={visibleDate}
           dayEvents={getVisibleDayEvents()}
           switchToPrevDay={switchToPrevDay}
           switchToNextDay={switchToNextDay}
           onAddNewEventBtnClick={openAddNewEventSection}
-        /> */}
+        />
         {/* <UserInfoWithAuthentification /> */}
         {/* <AddNewEvent
           isVisible={addNewEventVisible}
