@@ -8,26 +8,10 @@ export type Event = {
 	isPinned: boolean;
 };
 
-export type DayEvents = {
-	[key: string]: Event;
-};
-
-export type MonthEvents = {
-	[day: string]: DayEvents;
-};
-
-export type YearEvents = {
-	[month: string]: MonthEvents;
-};
-
-export type UserEvents = {
-	[year: string]: YearEvents;
-};
+export type UserEvents = Event[];
 
 export type CalendarState = {
 	currentDate: Date;
 	visibleDate: Date;
 	events: UserEvents;
-	loading: boolean;
-	isSubscribed: boolean;
 };

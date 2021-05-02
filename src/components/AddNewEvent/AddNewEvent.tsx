@@ -14,7 +14,6 @@ import { Event } from '../../store/store-types/calendar';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { addNewEvent, getVisibleDate } from '../../store/calendar';
-import { getUserId } from '../../store/auth';
 
 type Props = {
 	isVisible: boolean;
@@ -34,7 +33,6 @@ export function AddNewEvent({ isVisible, onCloseBtnClick }: Props) {
 	const [newEvent, setNewEvent] = useState<Event>(emptyEvent);
 
 	const dispatch = useDispatch();
-	const userId = useSelector(getUserId);
 	const eventDate = useSelector(getVisibleDate);
 
 	const changeEventValue = (
@@ -44,21 +42,7 @@ export function AddNewEvent({ isVisible, onCloseBtnClick }: Props) {
 		setNewEvent({ ...newEvent, [key]: newValue });
 	};
 
-	const onCreateNewEvent = () => {
-		// BUG: event is not refreshed;
-		// setNewEvent({ ...newEvent, ...emptyEvent });
-		// onCloseBtnClick();
-
-		dispatch(
-			addNewEvent(
-				userId || '',
-				eventDate.getFullYear(),
-				eventDate.getMonth(),
-				eventDate.getDate(),
-				newEvent,
-			),
-		);
-	};
+	const onCreateNewEvent = () => dispatch(addNewEvent(newEvent));
 
 	const { emoji, title } = newEvent;
 

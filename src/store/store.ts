@@ -9,6 +9,7 @@ import calendarReducer from './calendar';
 
 import firebaseAuthMiddleware from './middleware/firebaseAuthMiddleware';
 import firebaseDatabaseMiddleware from './middleware/firebaseDatabaseMiddleware';
+import customDatabaseMiddleware from './middleware/customBackendMiddleware';
 
 const rootReducer = combineReducers({
 	auth: authReducer,
@@ -19,6 +20,7 @@ const store = configureStore({
 	reducer: rootReducer,
 	middleware: [
 		...getDefaultMiddleware(),
+		customDatabaseMiddleware,
 		firebaseAuthMiddleware,
 		firebaseDatabaseMiddleware,
 	],

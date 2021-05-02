@@ -2,54 +2,25 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 
 import { isObjectEmpty } from '../utils/helperFunctions';
-
 import { DAYS_IN_WEEK } from '../utils/constants';
 
-import * as firebaseActions from './firebase/firebaseActions';
-import {
-	createEventsRef,
-	createAttendeesRef,
-} from './firebase/firebaseRefCreators';
+import * as dbActions from './db/dbActions';
 
-import { StoreDispatch, StoreGetState } from './store';
-
-import {
-	CalendarState,
-	UserEvents,
-	Event,
-	YearEvents,
-	MonthEvents,
-	DayEvents,
-} from './store-types/calendar';
+import { CalendarState, UserEvents, Event } from './store-types/calendar';
 import { RootState } from './store-types/root';
 
 const initialState: CalendarState = {
 	currentDate: new Date(),
 	visibleDate: new Date(),
-	events: {},
-	loading: false,
-	isSubscribed: false,
+	events: [],
 };
 
 const calendarSlice = createSlice({
 	name: 'calendar',
 	initialState,
 	reducers: {
-		eventsChangesRequested: (state: CalendarState) => {
-			state.loading = true;
-		},
-		eventsChangesRequestFailed: (state: CalendarState) => {
-			state.loading = false;
-		},
-		eventsUpdated: (
-			state: CalendarState,
-			action: PayloadAction<UserEvents>,
-		) => {
+		eventsLoaded: (state: CalendarState, action: PayloadAction<UserEvents>) => {
 			state.events = action.payload;
-			state.loading = false;
-		},
-		subscribedToEvents: (state: CalendarState) => {
-			state.isSubscribed = true;
 		},
 		changeVisibleDate: (state: CalendarState, action: PayloadAction<Date>) => {
 			const newDate: Date = action.payload;
@@ -58,133 +29,58 @@ const calendarSlice = createSlice({
 	},
 });
 
-const {
-	eventsChangesRequested,
-	eventsChangesRequestFailed,
-	eventsUpdated,
-	subscribedToEvents,
-	changeVisibleDate,
-} = calendarSlice.actions;
+const { eventsLoaded, changeVisibleDate } = calendarSlice.actions;
 export default calendarSlice.reducer;
-
-// TO_DO: something wrong with types!
-// Action creators
-export const subscribeToUserEvents = (uid: string) => (
-	dispatch: StoreDispatch,
-	getState: StoreGetState,
-) => {
-	const { isSubscribed } = getState().calendar;
-	if (isSubscribed) return;
-
-	// TO_DO: get user id from auth.user.id
-	const ref = createEventsRef({ uid });
-
-	dispatch(
-		firebaseActions.subscribeDatabaseCallBegan({
-			ref,
-			onSuccess: eventsUpdated.type,
-			onStart: eventsChangesRequested.type,
-			onError: eventsChangesRequestFailed.type,
-		}),
-	);
-
-	dispatch(subscribedToEvents());
-};
 
 export const changeDate = (newDate: Date) => changeVisibleDate(newDate);
 
-export const addNewEvent = (
-	uid: string,
-	year: number,
-	month: number,
-	day: number,
-	event: Event,
-) => {
-	const ref = createEventsRef({ uid, year, month, day });
-	const eventToAdd = { ...event, isPinned: false };
-	return firebaseActions.addItemCallBegun({
-		ref,
-		item: eventToAdd,
+export const addNewEvent = (event: Event) => {
+	const { title, notes, startTime, finishTime, emoji } = event;
+
+	const eventToAdd = {
+		title,
+		description: notes,
+		icon: emoji,
+		timeStart: startTime,
+		timeEnd: finishTime,
+		isPinned: false,
+	};
+
+	return dbActions.dbStartRequest({
+		type: 'POST',
+		body: eventToAdd,
+		onSuccess: eventsLoaded.type,
 	});
 };
 
-export const updateEvent = (
-	uid: string,
-	year: number,
-	month: number,
-	day: number,
-	eventKey: string,
-	updatedEvent: Event,
-) => {
-	const ref = createEventsRef({ uid, year, month, day, eventKey });
-
-	return firebaseActions.updateItemCallBegun({
-		ref,
-		updatedEvent,
-	});
-};
-
-export const removeEvent = (
-	uid: string,
-	year: number,
-	month: number,
-	day: number,
-	eventKey: string,
-) => {
-	const ref = createEventsRef({ uid, year, month, day, eventKey });
-
-	return firebaseActions.removeItemCallBegun({
-		ref,
-	});
-};
-
-export const pinEvent = (
-	uid: string,
-	year: number,
-	month: number,
-	day: number,
-	eventKey: string,
-	event: Event,
-) => {
-	const ref = createEventsRef({ uid, year, month, day, eventKey });
-	const updatedEvent: Event = { ...event, isPinned: true };
-
-	return firebaseActions.updateItemCallBegun({ ref, updatedEvent });
-};
-
-export const unpinEvent = (
-	uid: string,
-	year: number,
-	month: number,
-	day: number,
-	eventKey: string,
-	event: Event,
-) => {
-	const ref = createEventsRef({ uid, year, month, day, eventKey });
-	const updatedEvent: Event = { ...event, isPinned: false };
-
-	return firebaseActions.updateItemCallBegun({ ref, updatedEvent });
-};
-
-// Collaboration!!
-// export const addNewAttendee = (
-// 	attendeeEmail,
-// 	uid,
-// 	year,
-// 	month,
-// 	day,
-// 	eventKey,
+// export const updateEvent = (
+// 	uid: string,
+// 	year: number,
+// 	month: number,
+// 	day: number,
+// 	eventKey: string,
+// 	updatedEvent: Event,
 // ) => {
-// 	// Google's ADMIN SDK (backend) needed:
-// 	// https://firebase.google.com/docs/auth/admin/manage-users
-// 	// const ref = createAttendeesRef({ uid, year, month, day, eventKey });
-// 	// return firebaseActions.addItemCallBegun({
-// 	// 	ref,
-// 	// 	item: attendee,
-// 	// });
+// 	const ref = createEventsRef({ uid, year, month, day, eventKey });
+
+// 	return firebaseActions.updateItemCallBegun({
+// 		ref,
+// 		updatedEvent,
+// 	});
 // };
 
-// export const removeAttendee = () => {
+// export const removeEvent = (
+// 	uid: string,
+// 	year: number,
+// 	month: number,
+// 	day: number,
+// 	eventKey: string,
+// ) => {
+// 	const ref = createEventsRef({ uid, year, month, day, eventKey });
+
+// 	return firebaseActions.removeItemCallBegun({
+// 		ref,
+// 	});
 // };
 
 // Selectors
@@ -320,17 +216,6 @@ export const getVisibleDayEvents = createSelector(
 	(monthEvents: MonthEvents | null, date: string): DayEvents | null =>
 		monthEvents ? monthEvents[date] : null,
 );
-
-// export const getEventByKey = (
-// 	year: string,
-// 	month: string,
-// 	day: string,
-// 	eventKey: string,
-// ) =>
-// 	createSelector(
-// 		getDayEvents(year, month, day),
-// 		(dayEvents: DayEvents) => dayEvents[eventKey] || [],
-// 	);
 
 // Helper functions
 const getDaysInMonthCount = (year: number, month: number) =>
