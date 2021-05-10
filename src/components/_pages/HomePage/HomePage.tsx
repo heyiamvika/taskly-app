@@ -26,12 +26,8 @@ type Props = {
 export function HomePage({ firebase, user }: Props) {
   const [currentDate] = useState(new Date());
   const [visibleDate, setVisibleDate] = useState(currentDate);
-  //   const [monthlySchedule, setMonthlySchedule] = useState<{
-  //     [key: number]: object;
-  //   } | null>(null);
   const [addNewEventVisible, setAddNewEventVisible] = useState(false);
-
-  const events = useSingleUserCalendar();
+  const [events] = useSingleUserCalendar();
 
   console.log("events", events);
 
@@ -153,12 +149,12 @@ export function HomePage({ firebase, user }: Props) {
           onAddNewEventBtnClick={openAddNewEventSection}
         />
         {/* <UserInfoWithAuthentification /> */}
-        {/* <AddNewEvent
+        <AddNewEvent
           isVisible={addNewEventVisible}
           eventDate={visibleDate}
           onCloseBtnClick={closeAddNewEventSection}
           onCreateNewEvent={createNewEvent}
-        /> */}
+        />
       </div>
     </div>
   );

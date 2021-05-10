@@ -42,6 +42,7 @@
     ]
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.168"
+    "@types/lodash": "^4.14.168",
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }
