@@ -27,6 +27,9 @@ export function HomePage({ firebase, user }: Props) {
   const [currentDate] = useState(new Date());
   const [visibleDate, setVisibleDate] = useState(currentDate);
   const [addNewEventVisible, setAddNewEventVisible] = useState(false);
+
+  console.log("render HOME PAGE");
+
   const [events] = useSingleUserCalendar();
 
   console.log("events", events);
