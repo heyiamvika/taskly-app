@@ -80,24 +80,12 @@ export function HomePage({ firebase, user }: Props) {
   };
 
   const getVisibleDayEvents = () => {
+    console.log("visible Date", visibleDate.getDate());
     return _.isEmpty(events) ? null : events[visibleDate.getDate()];
   };
 
   const openAddNewEventSection = () => setAddNewEventVisible(true);
   const closeAddNewEventSection = () => setAddNewEventVisible(false);
-
-  const createNewEvent = (newEvent: Event) => {
-    // firebase.createNewTask(
-    //   user.uid,
-    //   visibleDate.getFullYear(),
-    //   visibleDate.getMonth(),
-    //   visibleDate.getDate(),
-    //   newEvent
-    // );
-
-    closeAddNewEventSection();
-    // fetchNewSchedule();
-  };
 
   //   const fetchNewSchedule = async () => {
   //     const newSchedule = await firebase.getMonthlySchedule(
@@ -156,7 +144,6 @@ export function HomePage({ firebase, user }: Props) {
           isVisible={addNewEventVisible}
           eventDate={visibleDate}
           onCloseBtnClick={closeAddNewEventSection}
-          onCreateNewEvent={createNewEvent}
         />
       </div>
     </div>

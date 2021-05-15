@@ -13,21 +13,14 @@ import { OvalYellowButton } from "../buttons/OvalYellowButton/OvalYellowButton";
 import { Event } from "../../utils/types";
 
 import useSingleUserAddEvent from "../../hooks/useSingleUserAddEvent";
-import useSingleUserCalendar from "../../hooks/useSingleUserCalendar";
 
 type Props = {
   isVisible: boolean;
   eventDate: Date;
   onCloseBtnClick: () => void;
-  onCreateNewEvent: (newEvent: Event) => void;
 };
 
-export function AddNewEvent({
-  eventDate,
-  isVisible,
-  onCloseBtnClick,
-  onCreateNewEvent,
-}: Props) {
+export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
   const [newEvent, setNewEvent] = useState<Event>({
     emoji: "🥰",
     startTime: "",
@@ -39,7 +32,7 @@ export function AddNewEvent({
 
   const [sendNewEvent, setsendNewEvent] = useState<boolean>(false);
 
-  useSingleUserAddEvent(newEvent, sendNewEvent);
+  useSingleUserAddEvent(newEvent, sendNewEvent, onCloseBtnClick);
 
   const changeEventValue = <Type extends {}>(newValue: Type, key: string) => {
     setNewEvent({ ...newEvent, [key]: newValue });
