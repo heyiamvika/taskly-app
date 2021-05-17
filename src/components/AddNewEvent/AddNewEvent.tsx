@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./AddNewEvent.css";
 
@@ -21,31 +21,24 @@ type Props = {
 };
 
 export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
-  const initialStartTime = new Date(
-    eventDate.getFullYear(),
-    eventDate.getMonth(),
-    eventDate.getDate(),
-    7,
-    0,
-    0
-  );
-
-  const initialFinishTime = new Date(
-    eventDate.getFullYear(),
-    eventDate.getMonth(),
-    eventDate.getDate(),
-    8,
-    0,
-    0
-  );
-
-  console.log("initialStartTime", initialStartTime);
-  console.log("initialFinishTime", initialFinishTime);
-
   const [newEvent, setNewEvent] = useState<Event>({
     emoji: "🥰",
-    startTime: initialStartTime,
-    finishTime: initialFinishTime,
+    startTime: new Date(
+      eventDate.getFullYear(),
+      eventDate.getMonth(),
+      eventDate.getDate(),
+      7,
+      0,
+      0
+    ),
+    finishTime: new Date(
+      eventDate.getFullYear(),
+      eventDate.getMonth(),
+      eventDate.getDate(),
+      8,
+      0,
+      0
+    ),
     title: "",
     notes: "",
     isPinned: false,
@@ -55,8 +48,32 @@ export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
 
   useSingleUserAddEvent(newEvent, sendNewEvent, onCloseBtnClick);
 
-  const changeEventValue = <Type extends {}>(newValue: Type, key: string) => {
-    console.log("newEventChanged", { ...newEvent, [key]: newValue });
+  useEffect(() => {
+    setNewEvent({
+      ...newEvent,
+      startTime: new Date(
+        eventDate.getFullYear(),
+        eventDate.getMonth(),
+        eventDate.getDate(),
+        7,
+        0,
+        0
+      ),
+      finishTime: new Date(
+        eventDate.getFullYear(),
+        eventDate.getMonth(),
+        eventDate.getDate(),
+        8,
+        0,
+        0
+      ),
+    });
+  }, [eventDate]);
+
+  const changeEventValue = (
+    key: string,
+    newValue: Date | string | undefined
+  ) => {
     setNewEvent({ ...newEvent, [key]: newValue });
   };
 
@@ -85,7 +102,7 @@ export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
           emoji="⏰"
           initialEventDateTime={startTime}
           keyOnSelectChange="startTime"
-          onSelectChange={changeEventValue}
+          onTimeSelectChange={changeEventValue}
         />
       </div>
       <div className="input-wrapper">
@@ -94,7 +111,7 @@ export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
           emoji="⌛"
           initialEventDateTime={finishTime}
           keyOnSelectChange="finishTime"
-          onSelectChange={changeEventValue}
+          onTimeSelectChange={changeEventValue}
         />
       </div>
       <div className="input-wrapper">

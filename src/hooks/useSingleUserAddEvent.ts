@@ -11,15 +11,12 @@ export default function useSingleUserAddEvent(
   const [isSent, setIsSent] = useState<boolean>(false);
 
   console.log("useSingleUserAddEvent is called");
-  console.log("startTime", event.startTime);
 
   useEffect(() => {
     if (shouldSendEvent) {
-      const startTime = event.startTime.toDate();
+      const { startTime } = event;
 
-      const docKey = `${startTime.getFullYear()}:${
-        startTime.getMonth() + 1
-      }:${startTime.getDate()}`;
+      const docKey = `${startTime.getFullYear()}:${startTime.getMonth()}:${startTime.getDate()}`;
       const eventKey = `${startTime.getHours()}:${startTime.getMinutes()}:${startTime.getSeconds()}`;
 
       const docRef = db.collection("single-user-calendar").doc(docKey);

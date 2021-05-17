@@ -7,3 +7,11 @@ export type Event = {
   notes: string;
   isPinned: boolean;
 };
+
+export type DayEvents = {
+  [time: string]: Event;
+};
+
+export type AllEvents = {
+  [date: string]: DayEvents;
+};

@@ -1,28 +1,23 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
 
+import { AllEvents, DayEvents } from "../utils/types";
+
 const singleUserCalendarCollectionRef = db.collection("single-user-calendar");
 
-export default function useSingleUserCalendarGetVisibleEvents(
+export default function useSingleUserCalendarGetVisibleDateEvents(
   visibleDate: Date
 ) {
-  // TO_DO: separate type later
-  const [calEvents, setCalEvents] = useState<{
-    [key: string]: any;
-  }>({});
+  const [calEvents, setCalEvents] = useState<DayEvents>({});
 
-  const docKey = `${visibleDate.getFullYear()}:${
-    visibleDate.getMonth() + 1
-  }:${visibleDate.getDate()}`;
+  const docKey = `${visibleDate.getFullYear()}:${visibleDate.getMonth()}:${visibleDate.getDate()}`;
 
   useEffect(() => {
     singleUserCalendarCollectionRef
       .doc(docKey)
       .get()
       .then((doc) => {
-        if (doc.exists) {
-          setCalEvents({ ...calEvents, [doc.id]: doc.data() });
-        }
+        setCalEvents(doc.exists ? (doc.data() as DayEvents) : {});
       })
       .catch((error) => {
         console.error("Error receiving single user calendar event: ", error);

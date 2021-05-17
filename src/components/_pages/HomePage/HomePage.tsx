@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import useSingleUserCalendarGetVisibleEvents from "../../../hooks/useSingleUserCalendarGetVisibleEvents";
+import React, { useState } from "react";
+import useSingleUserCalendarGetVisibleDateEvents from "../../../hooks/useSingleUserCalendarGetVisibleEvents";
 import _ from "lodash";
 
 import "./HomePage.css";
@@ -11,8 +11,6 @@ import { AddNewEvent } from "../../AddNewEvent/AddNewEvent";
 
 import withAuthentification from "../../Session/withAuthentification";
 
-import { Event } from "../../../utils/types";
-
 const UserInfoWithAuthentification = withAuthentification(UserInfo);
 
 export function HomePage() {
@@ -20,9 +18,9 @@ export function HomePage() {
   const [visibleDate, setVisibleDate] = useState<Date>(currentDate);
   const [addNewEventVisible, setAddNewEventVisible] = useState<boolean>(false);
 
-  const [events] = useSingleUserCalendarGetVisibleEvents(visibleDate);
+  const [events] = useSingleUserCalendarGetVisibleDateEvents(visibleDate);
 
-  console.log("events", events);
+  console.log(events);
 
   const switchToPrevMonth = () => {
     setVisibleDate(
@@ -69,13 +67,13 @@ export function HomePage() {
     setVisibleDate(value);
   };
 
-  const getVisibleDayEvents = () => {
-    const dateString = `${visibleDate.getFullYear()}:${
-      visibleDate.getMonth() + 1
-    }:${visibleDate.getDate()}`;
+  // const getVisibleDayEvents = () => {
+  //   const dateString = `${visibleDate.getFullYear()}:${
+  //     visibleDate.getMonth() + 1
+  //   }:${visibleDate.getDate()}`;
 
-    return _.isEmpty(events) ? null : events[dateString];
-  };
+  //   return _.isEmpty(events) ? null : events[dateString];
+  // };
 
   const openAddNewEventSection = () => setAddNewEventVisible(true);
   const closeAddNewEventSection = () => setAddNewEventVisible(false);
@@ -94,7 +92,7 @@ export function HomePage() {
       <div className="home-page-white-section">
         <DaySchedule
           visibleDay={visibleDate}
-          dayEvents={getVisibleDayEvents()}
+          dayEvents={events}
           switchToPrevDay={switchToPrevDay}
           switchToNextDay={switchToNextDay}
           onAddNewEventBtnClick={openAddNewEventSection}

@@ -5,11 +5,11 @@ import { EventCard } from "../EventCard/EventCard";
 
 import "./DaySchedule.css";
 
-import { Event } from "../../utils/types";
+import { DayEvents } from "../../utils/types";
 
 type Props = {
   visibleDay: Date;
-  dayEvents: object | null;
+  dayEvents: DayEvents | null;
   switchToPrevDay: () => void;
   switchToNextDay: () => void;
   onAddNewEventBtnClick: () => void;
@@ -24,9 +24,10 @@ export function DaySchedule({
 }: Props) {
   const renderEventCards = () => {
     if (dayEvents) {
-      const events = Object.values(dayEvents);
-      return events.map((event: Event, index: number) => (
-        <EventCard key={index} calendarEvent={event} />
+      const keys: string[] = Object.keys(dayEvents);
+
+      return keys.map((key: string) => (
+        <EventCard key={key} calendarEvent={dayEvents[key]} />
       ));
     }
   };
