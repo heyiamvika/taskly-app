@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useSingleUserCalendar from "../../../hooks/useSingleUserCalendar";
+import useSingleUserCalendarGetVisibleEvents from "../../../hooks/useSingleUserCalendarGetVisibleEvents";
 import _ from "lodash";
 
 import "./HomePage.css";
@@ -10,27 +10,17 @@ import { UserInfo } from "../../UserInfo/UserInfo";
 import { AddNewEvent } from "../../AddNewEvent/AddNewEvent";
 
 import withAuthentification from "../../Session/withAuthentification";
-import Firebase from "../../Firebase/index";
 
 import { Event } from "../../../utils/types";
 
 const UserInfoWithAuthentification = withAuthentification(UserInfo);
 
-type Props = {
-  firebase: Firebase;
-  user: {
-    uid: string;
-  };
-};
+export function HomePage() {
+  const [currentDate] = useState<Date>(new Date());
+  const [visibleDate, setVisibleDate] = useState<Date>(currentDate);
+  const [addNewEventVisible, setAddNewEventVisible] = useState<boolean>(false);
 
-export function HomePage({ firebase, user }: Props) {
-  const [currentDate] = useState(new Date());
-  const [visibleDate, setVisibleDate] = useState(currentDate);
-  const [addNewEventVisible, setAddNewEventVisible] = useState(false);
-
-  console.log("render HOME PAGE");
-
-  const [events] = useSingleUserCalendar();
+  const [events] = useSingleUserCalendarGetVisibleEvents(visibleDate);
 
   console.log("events", events);
 
@@ -80,45 +70,15 @@ export function HomePage({ firebase, user }: Props) {
   };
 
   const getVisibleDayEvents = () => {
-    console.log("visible Date", visibleDate.getDate());
-    return _.isEmpty(events) ? null : events[visibleDate.getDate()];
+    const dateString = `${visibleDate.getFullYear()}:${
+      visibleDate.getMonth() + 1
+    }:${visibleDate.getDate()}`;
+
+    return _.isEmpty(events) ? null : events[dateString];
   };
 
   const openAddNewEventSection = () => setAddNewEventVisible(true);
   const closeAddNewEventSection = () => setAddNewEventVisible(false);
-
-  //   const fetchNewSchedule = async () => {
-  //     const newSchedule = await firebase.getMonthlySchedule(
-  //       user.uid,
-  //       visibleDate.getFullYear(),
-  //       visibleDate.getMonth()
-  //     );
-
-  //     setMonthlySchedule(newSchedule);
-  //   };
-
-  //   useEffect(() => {
-  //     if (!user) return;
-
-  //     // fetch user's schedule for this month
-  //     fetchNewSchedule();
-
-  //     // subscribe to user's schedule;
-  //     // const onDataChanged = (data: any) => {
-  //     // 	console.log('data changed', data);
-
-  //     // 	setMonthlySchedule(data);
-  //     // };
-
-  //     // firebase.subscribeToMonthlySchedule(
-  //     // 	user.uid,
-  //     // 	visibleDate.getFullYear(),
-  //     // 	visibleDate.getMonth(),
-  //     // 	onDataChanged,
-  //     // );
-
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, [user]);
 
   return (
     <div className="home-page">

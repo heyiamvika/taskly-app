@@ -11,7 +11,7 @@ import {
 type Props = {
   title: string;
   emoji: string;
-  eventDate: Date;
+  initialEventDateTime: Date;
   keyOnSelectChange: string;
   onSelectChange: <Type>(newValue: Type, key: string) => void;
 };
@@ -25,33 +25,34 @@ type State = {
 export function TimePicker({
   title,
   emoji,
-  eventDate,
+  initialEventDateTime,
   keyOnSelectChange,
   onSelectChange,
 }: Props) {
+  const initDateTime = new Date(initialEventDateTime);
+
   const [time, setTime] = useState<State>({
-    hours: 7,
-    minutes: 0,
+    hours: initDateTime.getHours(),
+    minutes: initDateTime.getMinutes(),
     dayPeriod: "AM",
   });
 
   const { hours, minutes, dayPeriod } = time;
 
-  useEffect(() => {
-    const clock24Hour = makeCloc24FromClock12Hours(hours, dayPeriod);
+  // useEffect(() => {
+  //   const clock24Hour = makeCloc24FromClock12Hours(hours, dayPeriod);
 
-    const newDate = new Date(
-      eventDate.getFullYear(),
-      eventDate.getMonth() + 1,
-      eventDate.getDate(),
-      clock24Hour,
-      minutes,
-      0
-    );
-    const newDateString = newDate.toString();
+  //   const newDate = new Date(
+  //     initDateTime.getFullYear(),
+  //     initDateTime.getMonth() + 1,
+  //     initDateTime.getDate(),
+  //     clock24Hour,
+  //     minutes,
+  //     0
+  //   );
 
-    onSelectChange(newDateString, keyOnSelectChange);
-  }, [hours, minutes, dayPeriod, eventDate]);
+  //   onSelectChange(newDate.toString(), keyOnSelectChange);
+  // }, [time]);
 
   const makeCloc24FromClock12Hours = (
     hour: number,

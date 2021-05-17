@@ -21,10 +21,31 @@ type Props = {
 };
 
 export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
+  const initialStartTime = new Date(
+    eventDate.getFullYear(),
+    eventDate.getMonth(),
+    eventDate.getDate(),
+    7,
+    0,
+    0
+  );
+
+  const initialFinishTime = new Date(
+    eventDate.getFullYear(),
+    eventDate.getMonth(),
+    eventDate.getDate(),
+    8,
+    0,
+    0
+  );
+
+  console.log("initialStartTime", initialStartTime);
+  console.log("initialFinishTime", initialFinishTime);
+
   const [newEvent, setNewEvent] = useState<Event>({
     emoji: "🥰",
-    startTime: "",
-    finishTime: "",
+    startTime: initialStartTime,
+    finishTime: initialFinishTime,
     title: "",
     notes: "",
     isPinned: false,
@@ -35,10 +56,11 @@ export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
   useSingleUserAddEvent(newEvent, sendNewEvent, onCloseBtnClick);
 
   const changeEventValue = <Type extends {}>(newValue: Type, key: string) => {
+    console.log("newEventChanged", { ...newEvent, [key]: newValue });
     setNewEvent({ ...newEvent, [key]: newValue });
   };
 
-  const { emoji, title } = newEvent;
+  const { emoji, title, startTime, finishTime } = newEvent;
 
   return (
     <div
@@ -61,7 +83,7 @@ export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
         <TimePicker
           title="Event start"
           emoji="⏰"
-          eventDate={eventDate}
+          initialEventDateTime={startTime}
           keyOnSelectChange="startTime"
           onSelectChange={changeEventValue}
         />
@@ -70,7 +92,7 @@ export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
         <TimePicker
           title="Event end"
           emoji="⌛"
-          eventDate={eventDate}
+          initialEventDateTime={finishTime}
           keyOnSelectChange="finishTime"
           onSelectChange={changeEventValue}
         />
