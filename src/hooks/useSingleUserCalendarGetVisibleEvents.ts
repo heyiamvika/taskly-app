@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
 
-import { AllEvents, DayEvents } from "../utils/types";
+import { DayEvents } from "../utils/types";
 
 const singleUserCalendarCollectionRef = db.collection("single-user-calendar");
 
@@ -15,12 +15,9 @@ export default function useSingleUserCalendarGetVisibleDateEvents(
   useEffect(() => {
     singleUserCalendarCollectionRef
       .doc(docKey)
-      .get()
-      .then((doc) => {
+      // .get()
+      .onSnapshot((doc) => {
         setCalEvents(doc.exists ? (doc.data() as DayEvents) : {});
-      })
-      .catch((error) => {
-        console.error("Error receiving single user calendar event: ", error);
       });
   }, [visibleDate]);
 

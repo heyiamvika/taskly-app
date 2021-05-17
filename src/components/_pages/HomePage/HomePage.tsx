@@ -67,14 +67,6 @@ export function HomePage() {
     setVisibleDate(value);
   };
 
-  // const getVisibleDayEvents = () => {
-  //   const dateString = `${visibleDate.getFullYear()}:${
-  //     visibleDate.getMonth() + 1
-  //   }:${visibleDate.getDate()}`;
-
-  //   return _.isEmpty(events) ? null : events[dateString];
-  // };
-
   const openAddNewEventSection = () => setAddNewEventVisible(true);
   const closeAddNewEventSection = () => setAddNewEventVisible(false);
 

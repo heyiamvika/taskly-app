@@ -10,27 +10,25 @@ export default function useSingleUserAddEvent(
 ) {
   const [isSent, setIsSent] = useState<boolean>(false);
 
-  console.log("useSingleUserAddEvent is called");
-
   useEffect(() => {
-    if (shouldSendEvent) {
-      const { startTime } = event;
+    if (!shouldSendEvent) return;
 
-      const docKey = `${startTime.getFullYear()}:${startTime.getMonth()}:${startTime.getDate()}`;
-      const eventKey = `${startTime.getHours()}:${startTime.getMinutes()}:${startTime.getSeconds()}`;
+    const { startTime } = event;
 
-      const docRef = db.collection("single-user-calendar").doc(docKey);
+    const docKey = `${startTime.getFullYear()}:${startTime.getMonth()}:${startTime.getDate()}`;
+    const eventKey = `${startTime.getHours()}:${startTime.getMinutes()}:${startTime.getSeconds()}`;
 
-      docRef
-        .set({ [eventKey]: event }, { merge: true })
-        .then(() => {
-          console.log("Document successfully written!");
-          setIsSent(true);
-        })
-        .catch((error) => {
-          console.error("Error adding document: ", error);
-        });
-    }
+    const docRef = db.collection("single-user-calendar").doc(docKey);
+
+    docRef
+      .set({ [eventKey]: event }, { merge: true })
+      .then(() => {
+        console.log("Document successfully written!");
+        setIsSent(true);
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
 
     if (onEventSentCallback) {
       onEventSentCallback();
