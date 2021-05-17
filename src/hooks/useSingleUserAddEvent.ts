@@ -13,11 +13,8 @@ export default function useSingleUserAddEvent(
   useEffect(() => {
     if (!shouldSendEvent) return;
 
-    const { startTime } = event;
-
-    const docKey = `${startTime.getFullYear()}:${startTime.getMonth()}:${startTime.getDate()}`;
-    const eventKey = `${startTime.getHours()}:${startTime.getMinutes()}:${startTime.getSeconds()}`;
-
+    const docKey = createDocKey(event.startTime);
+    const eventKey = createEventKey(event.startTime);
     const docRef = db.collection("single-user-calendar").doc(docKey);
 
     docRef
@@ -36,4 +33,18 @@ export default function useSingleUserAddEvent(
   }, [shouldSendEvent]);
 
   return isSent;
+}
+
+function createDocKey(time: Date): string {
+  return `${time.getFullYear()}:${time.getMonth()}:${time.getDate()}`;
+}
+
+function createEventKey(time: Date): string {
+  return `${getStringFromTimeNumber(time.getHours())}:${getStringFromTimeNumber(
+    time.getMinutes()
+  )}:${getStringFromTimeNumber(time.getSeconds())}`;
+}
+
+function getStringFromTimeNumber(value: number): string {
+  return value < 10 ? `0${value}` : `${value < 10}`;
 }

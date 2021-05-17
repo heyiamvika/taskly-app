@@ -21,7 +21,7 @@ type Props = {
 };
 
 export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
-  const [newEvent, setNewEvent] = useState<Event>({
+  const initialState = {
     emoji: "🥰",
     startTime: new Date(
       eventDate.getFullYear(),
@@ -42,8 +42,9 @@ export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
     title: "",
     notes: "",
     isPinned: false,
-  });
+  };
 
+  const [newEvent, setNewEvent] = useState<Event>(initialState);
   const [sendNewEvent, setsendNewEvent] = useState<boolean>(false);
 
   useSingleUserAddEvent(newEvent, sendNewEvent, onCloseBtnClick);
