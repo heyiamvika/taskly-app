@@ -46,5 +46,5 @@ function createEventKey(time: Date): string {
 }
 
 function getStringFromTimeNumber(value: number): string {
-  return value < 10 ? `0${value}` : `${value < 10}`;
+  return value < 10 ? `0${value}` : `${value}`;
 }

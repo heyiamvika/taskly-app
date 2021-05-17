@@ -2,6 +2,7 @@ import React from "react";
 
 import { DayScheduleHeader } from "../DayScheduleHeader/DayScheduleHeader";
 import { EventCard } from "../EventCard/EventCard";
+import { EventActionsBox } from "../EventActionsBox/EventActionsBox";
 import { DayEvents } from "../../utils/types";
 
 import _ from "lodash";
@@ -23,16 +24,15 @@ export function DaySchedule({
   switchToNextDay,
   onAddNewEventBtnClick,
 }: Props) {
-  console.log("dayEvents", dayEvents);
-
   const renderEventCards = () => {
     if (dayEvents) {
       const keys: string[] = Object.keys(dayEvents);
 
-      console.log("keys", keys.sort());
-
       return keys.map((key: string) => (
-        <EventCard key={key} calendarEvent={dayEvents[key]} />
+        <div className="event-card-wrapper" key={key}>
+          <EventCard key={key} calendarEvent={dayEvents[key]} />
+          <EventActionsBox />
+        </div>
       ));
     }
   };
