@@ -7,10 +7,14 @@ import "./EventCard.css";
 
 type Props = {
   calendarEvent: Event;
+  onLeftMouseClick: () => void;
+  onRightMouseClick: () => void;
 };
 
 export function EventCard({
   calendarEvent: { title, notes, emoji, startTime, finishTime },
+  onLeftMouseClick,
+  onRightMouseClick,
 }: Props) {
   const makeStringFromTimestamp = (timestamp: any) => {
     const dateAsDate = timestamp.toDate();
@@ -22,15 +26,21 @@ export function EventCard({
     }`;
   };
 
-  const getCardClass = () => {
-    // To-do: this is not very effective, pass through props / context??
-    const dateFromTimeString = startTime.toDate();
-    const now = new Date();
-    return dateFromTimeString > now ? "future" : "passed";
-  };
+  const getCardClass = () =>
+    `event-card ${startTime > new Date() ? "future" : "passed"}`;
+
+  function rightClick(e: React.MouseEvent<HTMLDivElement>) {
+    e.preventDefault();
+    onRightMouseClick();
+  }
 
   return (
-    <div className={`event-card ${getCardClass()}`} key={title}>
+    <div
+      className={getCardClass()}
+      key={title}
+      onClick={onLeftMouseClick}
+      onContextMenu={(e) => rightClick(e)}
+    >
       <EmojiIcon emoji={emoji} />
       <div className="event-information">
         <h4 className="event-card-name">{title}</h4>

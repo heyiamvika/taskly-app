@@ -1,13 +1,12 @@
 import React from "react";
 
 import { DayScheduleHeader } from "../DayScheduleHeader/DayScheduleHeader";
-import { EventCard } from "../EventCard/EventCard";
-import { EventActionsBox } from "../EventActionsBox/EventActionsBox";
 import { DayEvents } from "../../utils/types";
 
 import _ from "lodash";
 
 import "./DaySchedule.css";
+import { EventCardWrapper } from "../EventCardWrapper/EventCardWrapper";
 
 type Props = {
   visibleDay: Date;
@@ -27,12 +26,8 @@ export function DaySchedule({
   const renderEventCards = () => {
     if (dayEvents) {
       const keys: string[] = Object.keys(dayEvents);
-
       return keys.map((key: string) => (
-        <div className="event-card-wrapper" key={key}>
-          <EventCard key={key} calendarEvent={dayEvents[key]} />
-          <EventActionsBox />
-        </div>
+        <EventCardWrapper eventData={dayEvents[key]} key={key} />
       ));
     }
   };

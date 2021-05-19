@@ -7,9 +7,17 @@
   border: 2px solid #f8d57e;
   border-radius: 20px;
   position: absolute;
-  top: 20%;
-  right: 0;
+  top: 50%;
+  right: 0px;
   z-index: 1;
+}
+
+.actions-box-visible {
+  display: flex;
+}
+
+.actions-box-hidden {
+  display: none;
 }
 
 .event-actions-box button {
