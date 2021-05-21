@@ -4,18 +4,23 @@ import "./EventActionsBox.css";
 
 type Props = {
   isVisible: boolean;
-  onActionClick: () => void;
+  onPinActionClick: () => void;
+  onDeleteActionClick: () => void;
 };
 
-export function EventActionsBox({ isVisible, onActionClick }: Props) {
+export function EventActionsBox({
+  isVisible,
+  onPinActionClick,
+  onDeleteActionClick,
+}: Props) {
   function onPinEventClick() {
     console.log("pin event");
-    onActionClick();
+    onPinActionClick();
   }
 
   function onDeleteEventClick() {
     console.log("delete event");
-    onActionClick();
+    onDeleteActionClick();
   }
 
   function getActionsBoxClass(): string {

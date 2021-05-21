@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
+import { v4 } from "uuid";
 
 import { Event } from "../utils/types";
+
+import { createDayDocKey, createEventCollectionKey } from "../utils/hooksUtils";
 
 export default function useSingleUserAddEvent(
   event: Event,
@@ -13,12 +16,17 @@ export default function useSingleUserAddEvent(
   useEffect(() => {
     if (!shouldSendEvent) return;
 
-    const docKey = createDocKey(event.startTime);
-    const eventKey = createEventKey(event.startTime);
-    const docRef = db.collection("single-user-calendar").doc(docKey);
+    const dayDocKey = createDayDocKey(event.startTime);
+    const eventCollectionKey = createEventCollectionKey(event.startTime);
 
-    docRef
-      .set({ [eventKey]: event }, { merge: true })
+    const dayDocRef = db
+      .collection("single-user-calendar")
+      .doc(dayDocKey)
+      .collection(eventCollectionKey)
+      .doc(v4());
+
+    dayDocRef
+      .set({ event })
       .then(() => {
         console.log("Document successfully written!");
         setIsSent(true);
@@ -33,18 +41,4 @@ export default function useSingleUserAddEvent(
   }, [shouldSendEvent]);
 
   return isSent;
-}
-
-function createDocKey(time: Date): string {
-  return `${time.getFullYear()}:${time.getMonth()}:${time.getDate()}`;
-}
-
-function createEventKey(time: Date): string {
-  return `${getStringFromTimeNumber(time.getHours())}:${getStringFromTimeNumber(
-    time.getMinutes()
-  )}:${getStringFromTimeNumber(time.getSeconds())}`;
-}
-
-function getStringFromTimeNumber(value: number): string {
-  return value < 10 ? `0${value}` : `${value}`;
 }
