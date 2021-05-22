@@ -3,10 +3,8 @@ import React from "react";
 import { DayScheduleHeader } from "../DayScheduleHeader/DayScheduleHeader";
 import { DayEvents } from "../../utils/types";
 
-import _ from "lodash";
-
 import "./DaySchedule.css";
-import { EventCardWrapper } from "../EventCardWrapper/EventCardWrapper";
+// import { EventCardWrapper } from "../EventCardWrapper/EventCardWrapper";
 
 type Props = {
   visibleDay: Date;
@@ -23,14 +21,14 @@ export function DaySchedule({
   switchToNextDay,
   onAddNewEventBtnClick,
 }: Props) {
-  const renderEventCards = () => {
-    if (dayEvents) {
-      const keys: string[] = Object.keys(dayEvents);
-      return keys.map((key: string) => (
-        <EventCardWrapper eventData={dayEvents[key]} key={key} />
-      ));
-    }
-  };
+  // const renderEventCards = () => {
+  //   if (dayEvents) {
+  //     const keys: string[] = Object.keys(dayEvents);
+  //     return keys.map((key: string) => (
+  //       <EventCardWrapper eventData={dayEvents[key]} key={key} />
+  //     ));
+  //   }
+  // };
 
   const renderNoEvents = () => {
     return (
@@ -48,9 +46,9 @@ export function DaySchedule({
           onAddNewEventBtnClick={onAddNewEventBtnClick}
         />
       </div>
-      <div className="day-events-wrapper">
+      {/* <div className="day-events-wrapper">
         {_.isEmpty(dayEvents) ? renderNoEvents() : renderEventCards()}
-      </div>
+      </div> */}
     </div>
   );
 }

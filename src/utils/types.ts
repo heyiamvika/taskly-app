@@ -1,8 +1,4 @@
-import { v4 } from "uuid";
-
 export type Event = {
-  // TO_DO: refactor!!!
-  _id: typeof v4 | null;
   emoji: string | undefined;
   // TO_DO: refactor!!!
   startTime: Date | any;
@@ -13,9 +9,11 @@ export type Event = {
 };
 
 export type DayEvents = {
-  [time: string]: Event;
+  [time: string]: Event[];
 };
 
 export type AllEvents = {
   [date: string]: DayEvents;
 };
+
+export type CollectionsIds = { ["collections"]: string[] };

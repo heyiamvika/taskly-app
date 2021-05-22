@@ -1,24 +1,48 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
 
-import { DayEvents } from "../utils/types";
+import { DayEvents, CollectionsIds, Event } from "../utils/types";
+import { createDayDocKey } from "../utils/hooksUtils";
 
-const singleUserCalendarCollectionRef = db.collection("single-user-calendar");
+import _ from "lodash";
 
 export default function useSingleUserCalendarGetVisibleDateEvents(
   visibleDate: Date
 ) {
   const [calEvents, setCalEvents] = useState<DayEvents>({});
 
-  const docKey = `${visibleDate.getFullYear()}:${visibleDate.getMonth()}:${visibleDate.getDate()}`;
+  const dayDocKey = createDayDocKey(visibleDate);
+  const dayDocRef = db.collection("single-user-calendar").doc(dayDocKey);
 
   useEffect(() => {
-    singleUserCalendarCollectionRef
-      .doc(docKey)
-      // .get()
-      .onSnapshot((doc) => {
-        setCalEvents(doc.exists ? (doc.data() as DayEvents) : {});
-      });
+    dayDocRef.onSnapshot(async (doc) => {
+      if (doc.exists) {
+        const { collections } = doc.data() as CollectionsIds;
+
+        // TO_DO: consider restructuring DB to make it flat in future!!!!
+        // It shouldn't affect the UI though,
+        // you still return DayEvents
+        // O n^2!!!
+        collections.forEach((collectionId) =>
+          dayDocRef
+            .collection(collectionId)
+            .get()
+            .then((querySnapshot) => {
+              const collectionsData: DayEvents = {};
+
+              querySnapshot.forEach((document) => {
+                const event = document.data() as Event;
+
+                if (_.isEmpty(collectionsData))
+                  collectionsData[collectionId] = [event];
+                else collectionsData[collectionId].push(event);
+              });
+
+              setCalEvents(collectionsData);
+            })
+        );
+      }
+    });
   }, [visibleDate]);
 
   return [calEvents];

@@ -22,7 +22,6 @@ type Props = {
 
 export function AddNewEvent({ eventDate, isVisible, onCloseBtnClick }: Props) {
   const initialState = {
-    _id: null,
     emoji: "🥰",
     startTime: new Date(
       eventDate.getFullYear(),

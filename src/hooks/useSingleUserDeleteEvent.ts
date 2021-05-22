@@ -19,10 +19,16 @@ export default function useSingleUserDeleteEvent(
   useEffect(() => {
     if (!shouldDeleteEvent) return;
 
-    const startTime = new Date(event.startTime);
+    console.log("useSingleUserDeleteEvent called");
 
-    console.log("startTime", event.startTime);
-    console.log(startTime);
+    // const dayDocKey = createDayDocKey(event.startTime);
+    // const eventCollectionKey = createEventCollectionKey(event.startTime);
+
+    // const dayDocRef = db
+    //   .collection("single-user-calendar")
+    //   .doc(dayDocKey)
+    //   .collection(eventCollectionKey)
+    //   .doc(v4());
 
     // TO_DO: not deleting doc, but modifying it!
     // const docKey = createDocKey(event.startTime);
@@ -50,7 +56,3 @@ export default function useSingleUserDeleteEvent(
 
   return isDeleted;
 }
-
-// function getStringFromTimeNumber(value: number): string {
-//   return value < 10 ? `0${value}` : `${value}`;
-// }
