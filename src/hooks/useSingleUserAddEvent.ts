@@ -26,7 +26,7 @@ export default function useSingleUserAddEvent(
     // 1) collectionsIds are added to the array,
     // so we could iterate through them later
     // 2) don't forget to delete collectionId after deleting a collection
-    dayDocRef.set({
+    dayDocRef.update({
       collections: firestore.FieldValue.arrayUnion(eventCollectionKey),
     });
 

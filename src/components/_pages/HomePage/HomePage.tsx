@@ -20,7 +20,7 @@ export function HomePage() {
 
   const [events] = useSingleUserCalendarGetVisibleDateEvents(visibleDate);
 
-  console.log(events);
+  console.log("events", events);
 
   const switchToPrevMonth = () => {
     setVisibleDate(

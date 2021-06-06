@@ -23,24 +23,28 @@ export default function useSingleUserCalendarGetVisibleDateEvents(
         // It shouldn't affect the UI though,
         // you still return DayEvents
         // O n^2!!!
-        collections.forEach((collectionId) =>
-          dayDocRef
-            .collection(collectionId)
-            .get()
-            .then((querySnapshot) => {
-              const collectionsData: DayEvents = {};
 
-              querySnapshot.forEach((document) => {
-                const event = document.data() as Event;
+        const collectionsData: DayEvents = {};
 
-                if (_.isEmpty(collectionsData))
-                  collectionsData[collectionId] = [event];
-                else collectionsData[collectionId].push(event);
+        await Promise.all(
+          collections.map(async (collectionId) => {
+            return dayDocRef
+              .collection(collectionId)
+              .get()
+              .then((querySnapshot) => {
+                const timeEvents: any = [];
+
+                querySnapshot.forEach((document) => {
+                  const event = document.data() as Event;
+                  timeEvents.push(event);
+                });
+
+                collectionsData[collectionId] = timeEvents;
               });
-
-              setCalEvents(collectionsData);
-            })
+          })
         );
+
+        setCalEvents(collectionsData);
       }
     });
   }, [visibleDate]);
